@@ -1,0 +1,49 @@
+<Project TreatAsLocalProperty="Version;InformationalVersion;TargetFramework" Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <LangVersion>latest</LangVersion>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Title>Shoko Fanart.tv Artwork</Title>
+        <Authors>revam</Authors>
+        <RepositoryUrl>https://github.com/revam/dotnet-shoko-plugin-fanart</RepositoryUrl>
+        <Version>0.1.0</Version>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU;x64</Platforms>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <Nullable>enable</Nullable>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shoko.Plugin.Fanart.Tests" />
+    </ItemGroup>
+
+    <!--
+        The server supplies the abstractions and the queue engine at runtime, so
+        only compile-time assets are referenced here. A plugin that ships its own
+        copy of Shoko.Abstractions resolves IPlugin against that copy, and the
+        server skips it without an error.
+    -->
+    <ItemGroup>
+        <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.89" ExcludeAssets="runtime" />
+        <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.6" ExcludeAssets="runtime" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Pulls in Microsoft.Extensions.{Logging,DependencyInjection,Hosting,Http}
+             for us, and is required for IPluginApplicationRegistration's
+             IApplicationBuilder parameter used to register the recurring sweep job. -->
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Injects the embedded plugin identity metadata the server reads during
+             discovery. PrivateAssets alone is not enough: without ExcludeAssets
+             the package's own MSBuild tasks and satellite assemblies end up in
+             the plugin output. -->
+        <PackageReference Include="Shoko.BuildTools.Targets" Version="0.3.0" PrivateAssets="All" ExcludeAssets="runtime" />
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.203" PrivateAssets="All" />
+        <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+{
+  "id": "3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b",
+  "name": "Fanart.tv Artwork",
+  "overview": "Adds series and movie artwork from Fanart.tv to TMDB-linked entries, keyed through the TheTVDB ID for shows and the TMDB ID for movies.",
+  "authors": "revam",
+  "repository_url": "https://github.com/revam/dotnet-shoko-plugin-fanart",
+  "homepage_url": null,
+  "tags": [
+    "artwork",
+    "images",
+    "fanart",
+    "fanart.tv",
+    "tmdb"
+  ],
+  "thumbnail": null,
+  "releases": []
+}
