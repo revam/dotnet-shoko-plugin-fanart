@@ -52,13 +52,20 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
         serviceCollection.AddSingleton<FanartArtworkService>();
 
         serviceCollection
-            .AddHttpClient<FanartApiClient>(client =>
+            // The contact URL is read back from the plugin's own registered info
+            // rather than written here, so it names wherever this build was
+            // published from instead of hard-coding one host into the source. A
+            // local build has no repository URL stamped, so the comment is left
+            // off rather than sent empty.
+            .AddHttpClient<FanartApiClient>((provider, client) =>
             {
+                var info = provider.GetRequiredService<IPluginManager>().GetPluginInfo<Plugin>();
                 client.BaseAddress = new Uri("https://webservice.fanart.tv/");
                 client.DefaultRequestHeaders.UserAgent.Add(
-                    new ProductInfoHeaderValue("Shoko.Plugin.Fanart", typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "0.1.0")
+                    new ProductInfoHeaderValue("Shoko.Plugin.Fanart", info?.Version.Version.ToString(3) ?? typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "0.1.0")
                 );
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("(+https://github.com/revam/dotnet-shoko-plugin-fanart)"));
+                if (info?.RepositoryUrl is { Length: > 0 } repositoryUrl)
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue($"(+{repositoryUrl})"));
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromSeconds(30);
             })
