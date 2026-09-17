@@ -106,6 +106,27 @@ server-side without notice, and guessing at one from its name is how artwork
 ends up in the wrong slot. Adding a new one is one line in
 `FanartArtworkMap`.
 
+## Installation
+
+### GUI (Recommended)
+
+1. Open the Shoko Web UI and navigate to **Settings → Plugins → Repositories**.
+2. Add the manifest URL:
+   ```
+   https://raw.githubusercontent.com/revam/dotnet-shoko-plugin-fanart/metadata/manifest.json
+   ```
+3. Go to **Settings → Plugins → Browse** and find **Fanart.tv Artwork**.
+4. Click **Install** on the desired version.
+5. Restart Shoko.
+
+### Manual
+
+1. Download the latest `Shoko.Plugin.Fanart-<version>-any.zip` from the
+   [Releases](../../releases) page.
+2. Extract the ZIP and place `Shoko.Plugin.Fanart.dll` into your Shoko
+   **Plugins** folder.
+3. Restart Shoko.
+
 ## Configuration
 
 Fanart.tv requires an API key for all access, and the key belongs to whoever
