@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ShokoAnime/ShokoServer/master/Shoko.BuildTools/manifest.schema.json",
+  "id": "3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b",
+  "type": "package",
+  "name": "Fanart.tv Artwork",
+  "overview": "Adds series and movie artwork from Fanart.tv to TMDB-linked entries, keyed through the TheTVDB ID for shows and the TMDB ID for movies.",
+  "authors": "revam",
+  "repository_url": "https://github.com/revam/dotnet-shoko-plugin-fanart",
+  "tags": [
+    "artwork",
+    "images",
+    "fanart",
+    "fanart.tv",
+    "tmdb"
+  ],
+  "releases": []
+}
