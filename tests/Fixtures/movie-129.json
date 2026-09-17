@@ -1,0 +1,97 @@
+{
+  "_fixture_note": "HAND-WRITTEN, NOT A CAPTURE. Shaped after fanart.tv's own API client documentation; unverified against the live API.",
+  "name": "Spirited Away",
+  "tmdb_id": "129",
+  "imdb_id": "tt0245429",
+  "image_count": 7,
+  "movieposter": [
+    {
+      "id": "61001",
+      "url": "https://assets.fanart.tv/fanart/movies/129/movieposter/spirited-away-5c1a2b3c4d5e6.jpg",
+      "lang": "en",
+      "likes": "22",
+      "width": "1000",
+      "height": "1426"
+    },
+    {
+      "id": "61002",
+      "url": "https://assets.fanart.tv/fanart/movies/129/movieposter/spirited-away-5c1a2b3c4d5e7.jpg",
+      "lang": "ja",
+      "likes": "9",
+      "width": "1000",
+      "height": "1426"
+    }
+  ],
+  "moviebackground": [
+    {
+      "id": "61003",
+      "url": "https://assets.fanart.tv/fanart/movies/129/moviebackground/spirited-away-5c1a2b3c4d5e8.jpg",
+      "lang": "00",
+      "likes": "31",
+      "width": "1920",
+      "height": "1080"
+    }
+  ],
+  "hdmovielogo": [
+    {
+      "id": "61004",
+      "url": "https://assets.fanart.tv/fanart/movies/129/hdmovielogo/spirited-away-5c1a2b3c4d5e9.png",
+      "lang": "en",
+      "likes": "15",
+      "width": "800",
+      "height": "310"
+    }
+  ],
+  "movielogo": [
+    {
+      "id": "61005",
+      "url": "https://assets.fanart.tv/fanart/movies/129/movielogo/spirited-away-5c1a2b3c4d5ea.png",
+      "lang": "en",
+      "likes": "50",
+      "width": "400",
+      "height": "155"
+    }
+  ],
+  "moviedisc": [
+    {
+      "id": "61006",
+      "url": "https://assets.fanart.tv/fanart/movies/129/moviedisc/spirited-away-5c1a2b3c4d5eb.png",
+      "lang": "en",
+      "likes": "4",
+      "disc": "1",
+      "disc_type": "bluray",
+      "width": "1000",
+      "height": "1000"
+    }
+  ],
+  "moviebanner": [
+    {
+      "id": "61007",
+      "url": "https://assets.fanart.tv/fanart/movies/129/moviebanner/spirited-away-5c1a2b3c4d5ec.jpg",
+      "lang": "en",
+      "likes": "3",
+      "width": "1000",
+      "height": "185"
+    }
+  ],
+  "moviethumb": [
+    {
+      "id": "61008",
+      "url": "https://assets.fanart.tv/fanart/movies/129/moviethumb/spirited-away-5c1a2b3c4d5ed.jpg",
+      "lang": "en",
+      "likes": "8",
+      "width": "1000",
+      "height": "562"
+    }
+  ],
+  "movieart": [
+    {
+      "id": "61009",
+      "url": "https://assets.fanart.tv/fanart/movies/129/movieart/spirited-away-5c1a2b3c4d5ee.png",
+      "lang": "en",
+      "likes": "2",
+      "width": "500",
+      "height": "281"
+    }
+  ]
+}

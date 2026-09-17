@@ -1,0 +1,143 @@
+{
+  "_fixture_note": "HAND-WRITTEN, NOT A CAPTURE. Shaped after fanart.tv's own API client documentation; unverified against the live API. This field also proves an unknown scalar field is ignored rather than breaking parsing.",
+  "name": "Cowboy Bebop",
+  "thetvdb_id": "76885",
+  "image_count": 9,
+  "hdtvlogo": [
+    {
+      "id": "51021",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/hdtvlogo/cowboy-bebop-5b7f1a2c3d4e5.png",
+      "lang": "en",
+      "likes": "12",
+      "added": "2019-08-16 22:52:46",
+      "width": "800",
+      "height": "310"
+    },
+    {
+      "id": "51022",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/hdtvlogo/cowboy-bebop-5b7f1a2c3d4e6.png",
+      "lang": "ja",
+      "likes": "3",
+      "added": "2020-01-02 10:00:00",
+      "width": "800",
+      "height": "310"
+    }
+  ],
+  "hdtvlogo_count": 2,
+  "clearlogo": [
+    {
+      "id": "51023",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/clearlogo/cowboy-bebop-5b7f1a2c3d4e7.png",
+      "lang": "en",
+      "likes": "40",
+      "width": "400",
+      "height": "155"
+    }
+  ],
+  "tvposter": [
+    {
+      "id": "51024",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/tvposter/cowboy-bebop-5b7f1a2c3d4e8.jpg",
+      "lang": "en",
+      "likes": "7",
+      "width": "1000",
+      "height": "1426"
+    }
+  ],
+  "showbackground": [
+    {
+      "id": "51025",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/showbackground/cowboy-bebop-5b7f1a2c3d4e9.jpg",
+      "lang": "",
+      "likes": "18",
+      "width": "1920",
+      "height": "1080"
+    },
+    {
+      "id": "51026",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/showbackground/cowboy-bebop-5b7f1a2c3d4ea.jpg",
+      "lang": "00",
+      "likes": "2",
+      "width": "1920",
+      "height": "1080"
+    },
+    {
+      "id": "51027",
+      "url": "https://images.example.test/not-a-fanart-asset.jpg",
+      "lang": "00",
+      "likes": "99",
+      "width": "1920",
+      "height": "1080"
+    }
+  ],
+  "show4kbackground": [
+    {
+      "id": "51028",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/show4kbackground/cowboy-bebop-5b7f1a2c3d4eb.jpg",
+      "lang": "00",
+      "likes": "1",
+      "width": "3840",
+      "height": "2160"
+    }
+  ],
+  "tvbanner": [
+    {
+      "id": "51029",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/tvbanner/cowboy-bebop-5b7f1a2c3d4ec.jpg",
+      "lang": "en",
+      "likes": "5",
+      "width": "1000",
+      "height": "185"
+    }
+  ],
+  "tvthumb": [
+    {
+      "id": "51030",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/tvthumb/cowboy-bebop-5b7f1a2c3d4ed.jpg",
+      "lang": "en",
+      "likes": "4",
+      "width": "500",
+      "height": "281"
+    }
+  ],
+  "hdclearart": [
+    {
+      "id": "51031",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/hdclearart/cowboy-bebop-5b7f1a2c3d4ee.png",
+      "lang": "en",
+      "likes": "6",
+      "width": "1000",
+      "height": "562"
+    }
+  ],
+  "characterart": [
+    {
+      "id": "51032",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/characterart/cowboy-bebop-5b7f1a2c3d4ef.png",
+      "lang": "00",
+      "likes": "3",
+      "width": "512",
+      "height": "512"
+    }
+  ],
+  "seasonposter": [
+    {
+      "id": "51033",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/seasonposter/cowboy-bebop-5b7f1a2c3d4f0.jpg",
+      "lang": "en",
+      "likes": "2",
+      "season": "1",
+      "width": "1000",
+      "height": "1426"
+    },
+    {
+      "id": "51034",
+      "url": "https://assets.fanart.tv/fanart/tv/76885/seasonposter/cowboy-bebop-5b7f1a2c3d4f1.jpg",
+      "lang": "en",
+      "likes": "1",
+      "season": "all",
+      "width": "1000",
+      "height": "1426"
+    }
+  ]
+}

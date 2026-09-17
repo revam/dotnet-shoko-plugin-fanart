@@ -1,0 +1,20 @@
+{
+  "_fixture_note": "HAND-WRITTEN, NOT A CAPTURE. A deliberately hostile variant of the TV response: the fields Fanart.tv documents as strings arrive as JSON numbers instead, one image is missing every optional field, and one entry is not an object at all. Nothing here has been seen in the wild; it exists so the parser cannot be broken by a plausible future change.",
+  "name": "Numbers Instead Of Strings",
+  "thetvdb_id": 76885,
+  "hdtvlogo": [
+    {
+      "id": 51021,
+      "url": "https://assets.fanart.tv/fanart/tv/76885/hdtvlogo/numeric-1.png",
+      "lang": "en",
+      "likes": 12,
+      "width": 800,
+      "height": 310
+    },
+    {
+      "url": "https://assets.fanart.tv/fanart/tv/76885/hdtvlogo/numeric-2.png"
+    },
+    "not-an-object"
+  ],
+  "showbackground": []
+}
