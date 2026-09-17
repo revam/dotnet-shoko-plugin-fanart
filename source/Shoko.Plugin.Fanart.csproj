@@ -6,7 +6,6 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Title>Shoko Fanart.tv Artwork</Title>
         <Authors>revam</Authors>
-        <RepositoryUrl>https://github.com/revam/dotnet-shoko-plugin-fanart</RepositoryUrl>
         <Version>0.1.0</Version>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU;x64</Platforms>
