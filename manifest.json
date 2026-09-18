@@ -1,17 +1,36 @@
 {
   "$schema": "https://raw.githubusercontent.com/ShokoAnime/ShokoServer/master/Shoko.BuildTools/manifest.schema.json",
-  "id": "3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b",
   "type": "package",
+  "id": "3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b",
   "name": "Fanart.tv Artwork",
   "overview": "Adds series and movie artwork from Fanart.tv to TMDB-linked entries, keyed through the TheTVDB ID for shows and the TMDB ID for movies.",
   "authors": "revam",
   "repository_url": "https://github.com/revam/dotnet-shoko-plugin-fanart",
   "tags": [
+    "application-registration",
+    "service-registration",
     "artwork",
     "images",
     "fanart",
     "fanart.tv",
     "tmdb"
   ],
-  "releases": []
+  "releases": [
+    {
+      "version": "1.0.0",
+      "tag": "v1.0.0",
+      "released_at": "2026-09-18T15:56:05.9573935Z",
+      "channel": "Stable",
+      "release_notes": "First release. Adds series and movie artwork from Fanart.tv to the TMDB entries in your collection, through Shoko\u0027s image manager: transparent logos, banners, high resolution backgrounds and disc art, the kinds Shoko has no other source for.\n\n**Series and movie artwork only**, deliberately. Fanart.tv numbers season artwork by TheTVDB seasons and Shoko\u0027s seasons come from TMDB; the two agree often enough to be tempting and disagree often enough to be wrong, so season artwork is recognised and dropped rather than attached to the wrong season.\n\nShows are looked up as \u0060TMDB show -\u003E TvdbShowID -\u003E v3.2/tv\u0060, which needs no Trakt, no TheTVDB key and no community mapping list. A show with no TheTVDB ID has no lookup path and is counted in the sweep\u0027s log rather than guessed at from its title, because wrong artwork is worse than none. Movies go straight through their TMDB id.\n\nArtwork attaches to the TMDB show or movie rather than to the Shoko series in front of it, so it follows the entry it belongs to.\n\n**You need a Fanart.tv key.** Official builds ship a project key, and you can add your own personal key alongside it in the settings, which shortens the delay on newly uploaded artwork from seven days to two. A build you compile yourself has no project key and asks for one.\n\nThe sweep runs weekly by default, matching the seven day delay before new uploads reach a project key, and only walks the TMDB entries already in your collection.\n\nRequires Shoko Server with abstractions \u00606.0.0-alpha.89\u0060.",
+      "dependencies": [],
+      "archives": [
+        {
+          "runtime": "any",
+          "abstraction": "6.0.0",
+          "url": "https://github.com/revam/dotnet-shoko-plugin-fanart/releases/download/v1.0.0/Fanart.tvArtwork-v1.0.0-any.zip",
+          "checksum": "sha256:490eca98bc5deb9123801ca866c6d72e65394e5b9f67e483c491104cae351b9c"
+        }
+      ]
+    }
+  ]
 }
