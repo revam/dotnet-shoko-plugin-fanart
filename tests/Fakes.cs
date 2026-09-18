@@ -32,6 +32,12 @@ internal sealed class FakeConfigurationService(FanartConfiguration configuration
 
     public void AddParts(IEnumerable<Type> configurationTypes) => throw new NotSupportedException();
 
+    public string SerializeWithMasking(IConfiguration config) => throw new NotSupportedException();
+
+    public string MaskSecrets(ConfigurationInfo info, string json) => throw new NotSupportedException();
+
+    public string RestoreMaskedSecrets(ConfigurationInfo info, string json) => throw new NotSupportedException();
+
     public ConfigurationProvider<TConfig> CreateProvider<TConfig>() where TConfig : class, IConfiguration, new() => new(this);
 
     public IEnumerable<ConfigurationInfo> GetAllConfigurationInfos() => throw new NotSupportedException();
