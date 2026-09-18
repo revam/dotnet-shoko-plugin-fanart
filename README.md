@@ -148,30 +148,30 @@ No setting is marked `[Required]`: a required setting that is unset fails
 validation, and a configuration that fails validation stops the whole plugin
 from loading. A missing key is checked for at runtime instead.
 
-## Unverified against the live API
+## Verified against the live API
 
-**The response models in this plugin have never seen a real Fanart.tv
-response.** Fanart.tv requires an API key for all access and none was available
-while the plugin was written, so every shape was modelled from Fanart.tv's own
-published client
+The response models were written from Fanart.tv's own published client
 ([fanart-tv/fanart.tv-api](https://github.com/fanart-tv/fanart.tv-api)) and its
-documentation. Every test fixture is hand-written to match, and is labelled as
-such in `tests/Fixtures/README.md` rather than implying it is a capture.
+documentation before any key was available, and were confirmed against the live
+API on 2026-09-18: a show through `v3.2/tv` and nine linked movies through
+`v3.2/movies`, mapping 150 artworks between them with nothing dropped as
+unparseable.
 
-What that means:
+The test fixtures are still hand-written rather than captures, and are labelled
+as such in `tests/Fixtures/README.md`. What they prove is unchanged: what the
+plugin does with a given shape, what is mapped, what is dropped, how artwork is
+ordered and capped, and what reaches the image manager.
 
-- The tests prove what the plugin does with that shape: what is mapped, what is
-  dropped, how artwork is ordered and capped, and what is written through the
-  image manager. They cannot prove the shape is right.
-- The parsing is built to survive being wrong about the details. Only `name` and
-  the identifier fields are hard-coded; artwork is read from whatever top-level
-  keys hold arrays, unknown fields are ignored rather than rejected, and every
-  numeric field is read from either a JSON string or a JSON number.
-- Everything that models the wire format lives in `source/Api/FanartModels.cs`,
-  so verifying it later is one file, one diff, and a fixture replacement.
-- One entry is a known guess: `tvposter` is not listed in the vendor client's
-  typed fields although it is a real asset kind on the site. If it never
-  arrives, that mapping simply never matches.
+The parsing is built to survive being wrong about the details anyway. Only
+`name` and the identifier fields are hard-coded; artwork is read from whatever
+top-level keys hold arrays, unknown fields are ignored rather than rejected, and
+every numeric field is read from either a JSON string or a JSON number.
+Everything that models the wire format lives in `source/Api/FanartModels.cs`, so
+correcting it later is one file and one diff.
+
+`tvposter` is worth a note: it is not listed in the vendor client's typed
+fields, and was mapped on the guess that the site really serves it. A live
+response carried eight of them, so the guess was right and the mapping stays.
 
 ## Building
 
