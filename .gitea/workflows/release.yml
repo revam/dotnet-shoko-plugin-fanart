@@ -166,6 +166,30 @@ jobs:
             "${GITHUB_SERVER_URL%/}/api/v1/repos/${GITHUB_REPOSITORY}/releases/tags/${{ github.event.release.tag_name }}" \
             | jq -r '.body // empty' > "${RUNNER_TEMP}/release-notes.md"
 
+      # Official builds ship the project key Fanart.tv issued for this
+      # plugin, because their terms expect a program to send its own project
+      # key and let a user add a personal key alongside it. The key is a
+      # secret rather than a value in the tree, so an unofficial build of
+      # this repository keeps the placeholder and asks the user for a key
+      # instead of borrowing ours. Only `Constants.cs` is rewritten: the
+      # comparison against the placeholder lives in `FanartApiClient.cs` on
+      # purpose, so that it survives this step.
+      - name: Stamp the project key
+        env:
+          FANART_PROJECT_KEY: ${{ secrets.FANART_PROJECT_KEY }}
+        run: |
+          if [ -z "${FANART_PROJECT_KEY}" ]; then
+            echo "FANART_PROJECT_KEY is unset; leaving the placeholder in place." >&2
+            exit 0
+          fi
+          file=source/Constants.cs
+          if ! grep -q 'FANART_PROJECT_KEY_GOES_HERE' "${file}"; then
+            echo "No placeholder left in ${file}; refusing to publish a build whose key state is unknown." >&2
+            exit 1
+          fi
+          sed -i "s/FANART_PROJECT_KEY_GOES_HERE/${FANART_PROJECT_KEY}/" "${file}"
+          echo "Stamped the project key into ${file}."
+
       # Pinned in .config/dotnet-tools.json, so the packaging of a release
       # is reproducible instead of depending on whichever shoko-build is
       # latest on the day it is cut.

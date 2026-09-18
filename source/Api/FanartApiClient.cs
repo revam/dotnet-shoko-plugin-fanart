@@ -15,8 +15,9 @@ namespace Shoko.Plugin.Fanart.Api;
 /// (<see href="https://webservice.fanart.tv"/>).
 /// </summary>
 /// <remarks>
-/// Every request carries the configured project key as <c>api_key</c>, and the
-/// personal key as <c>client_key</c> when one is set. API version 3.2 is used
+/// Every request carries a project key as <c>api_key</c>, from the settings or
+/// else from what CI stamped into an official build, and the user's personal
+/// key as <c>client_key</c> when one is set. API version 3.2 is used
 /// throughout, because it is the only version that reports image dimensions,
 /// which Shoko stores alongside the image.
 /// </remarks>
@@ -35,9 +36,28 @@ public sealed class FanartApiClient(
     private const int MaximumRateLimitRetries = 3;
 
     /// <summary>
-    /// Whether an API key is configured. Nothing can be fetched without one.
+    /// Whether a project key is available. Nothing can be fetched without one.
     /// </summary>
-    public bool HasApiKey => !string.IsNullOrWhiteSpace(configurationProvider.Load().ApiKey);
+    public bool HasApiKey => ResolveProjectKey(configurationProvider.Load()) is not null;
+
+    /// <summary>
+    /// Resolves the project key to send, preferring the configured one over the
+    /// key an official build was stamped with.
+    /// </summary>
+    /// <param name="configuration">The loaded configuration.</param>
+    /// <returns>The key, or <see langword="null"/> when neither is available.</returns>
+    private static string? ResolveProjectKey(FanartConfiguration configuration)
+    {
+        if (!string.IsNullOrWhiteSpace(configuration.ApiKey))
+            return configuration.ApiKey;
+
+        // CI rewrites `Constants.ProjectApiKey` for official builds, so in the
+        // tree this comparison is between two equal literals and the compiler
+        // sees the second branch as unreachable. It is not, once stamped.
+#pragma warning disable CS0162 // Unreachable code detected
+        return Constants.ProjectApiKey != "FANART_PROJECT_KEY_GOES_HERE" ? Constants.ProjectApiKey : null;
+#pragma warning restore CS0162 // Unreachable code detected
+    }
 
     /// <summary>
     /// Gets the artwork Fanart.tv holds for a TheTVDB show.
@@ -76,10 +96,10 @@ public sealed class FanartApiClient(
     private async Task<FanartArtworkSet?> GetArtwork(string path, CancellationToken cancellationToken)
     {
         var configuration = configurationProvider.Load();
-        if (string.IsNullOrWhiteSpace(configuration.ApiKey))
+        if (ResolveProjectKey(configuration) is not { } projectKey)
             return null;
 
-        var requestUri = $"{path}?api_key={Uri.EscapeDataString(configuration.ApiKey)}";
+        var requestUri = $"{path}?api_key={Uri.EscapeDataString(projectKey)}";
         if (!string.IsNullOrWhiteSpace(configuration.PersonalApiKey))
             requestUri += $"&client_key={Uri.EscapeDataString(configuration.PersonalApiKey)}";
 
