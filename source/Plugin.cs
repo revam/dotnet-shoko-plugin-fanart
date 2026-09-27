@@ -42,6 +42,10 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
     /// <inheritdoc/>
     public static void RegisterServices(IServiceCollection serviceCollection, IApplicationPaths applicationPaths)
     {
+        // Touching the class runs its static constructor, which registers the
+        // source before the server closes registration.
+        _ = FanartSources.FanartTV;
+
         // Registered as concrete singletons because this plugin's own code
         // resolves them: the sweep job, the two actions and the API client all
         // share one rate limiter and one HTTP client. Nothing here is a
@@ -82,6 +86,10 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
     {
         var services = application.ApplicationServices;
         var configuration = services.GetRequiredService<ConfigurationProvider<FanartConfiguration>>().Load();
+
+        // The server keeps the template URL in memory only, and downloads of
+        // artwork added before this start need it as much as new artwork does.
+        services.GetRequiredService<FanartImageService>().RegisterTemplateUrl();
 
         // This is the first point at which the container is built, which is
         // what the recurring job registry needs.

@@ -18,11 +18,11 @@ public static class FanartSweepPlanner
     /// Plans one sweep.
     /// </summary>
     /// <param name="series">
-    /// Every series known to the TMDB provider, as returned by
-    /// <c>IMetadataService.GetAllSeriesForProvider</c>.
+    /// Every TMDB series, as returned by
+    /// <c>IMetadataService.GetAllSeriesForSource</c>.
     /// </param>
     /// <param name="movies">
-    /// Every movie known to the TMDB provider, or an empty sequence when movies
+    /// Every TMDB movie, or an empty sequence when movies
     /// are switched off.
     /// </param>
     /// <returns>The plan.</returns>

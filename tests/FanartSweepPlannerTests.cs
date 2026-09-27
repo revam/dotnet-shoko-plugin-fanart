@@ -15,7 +15,7 @@ public class FanartSweepPlannerTests
     private static ITmdbShow Show(int id, int? tvdbShowID)
     {
         var show = new Mock<ITmdbShow>();
-        show.SetupGet(s => s.ID).Returns(id);
+        show.SetupGet(s => s.TmdbID).Returns(id);
         show.SetupGet(s => s.TvdbShowID).Returns(tvdbShowID);
         return show.Object;
     }
@@ -23,7 +23,7 @@ public class FanartSweepPlannerTests
     private static ITmdbMovie Movie(int id)
     {
         var movie = new Mock<ITmdbMovie>();
-        movie.SetupGet(m => m.ID).Returns(id);
+        movie.SetupGet(m => m.TmdbID).Returns(id);
         return movie.Object;
     }
 

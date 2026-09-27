@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shoko.Abstractions.Config;
+using Shoko.Abstractions.Metadata;
 using Shoko.Abstractions.Metadata.Services;
 using Shoko.Plugin.Fanart.Api;
 using Shoko.Plugin.Fanart.Images;
@@ -55,8 +56,8 @@ public class FanartSweepJob(
 
         var configuration = configurationProvider.Load();
         var plan = FanartSweepPlanner.Plan(
-            metadataService.GetAllSeriesForProvider(IMetadataService.ProviderName.TMDB),
-            configuration.IncludeMovies ? metadataService.GetAllMoviesForProvider(IMetadataService.ProviderName.TMDB) : []
+            metadataService.GetAllSeriesForSource(MetadataSource.TMDB),
+            configuration.IncludeMovies ? metadataService.GetAllMoviesForSource(MetadataSource.TMDB) : []
         );
 
         // A sweep that looks at very little has the same shape as a broken
@@ -80,7 +81,7 @@ public class FanartSweepJob(
         var failed = 0;
         foreach (var show in plan.Shows)
         {
-            var (outcome, changes) = await Refresh(() => artworkService.RefreshShow(show), "TMDB show", show.ID).ConfigureAwait(false);
+            var (outcome, changes) = await Refresh(() => artworkService.RefreshShow(show), "TMDB show", show.TmdbID).ConfigureAwait(false);
             if (outcome is RefreshOutcome.Aborted)
                 return;
             if (outcome is RefreshOutcome.Failed)
@@ -91,7 +92,7 @@ public class FanartSweepJob(
 
         foreach (var movie in plan.Movies)
         {
-            var (outcome, changes) = await Refresh(() => artworkService.RefreshMovie(movie), "TMDB movie", movie.ID).ConfigureAwait(false);
+            var (outcome, changes) = await Refresh(() => artworkService.RefreshMovie(movie), "TMDB movie", movie.TmdbID).ConfigureAwait(false);
             if (outcome is RefreshOutcome.Aborted)
                 return;
             if (outcome is RefreshOutcome.Failed)

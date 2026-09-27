@@ -41,50 +41,29 @@ public sealed class FanartImageService(
     ILogger<FanartImageService> logger
 )
 {
-    /// <summary>
-    /// The data source every image and cross-reference this plugin writes is
-    /// attributed to.
-    /// </summary>
-    /// <remarks>
-    /// The image source has to be <see cref="DataSource.FanartTV"/>, since that
-    /// is what the template URL is registered against. The cross-reference
-    /// source is the same on purpose: <see cref="DataSource.Plugin"/> is shared
-    /// by every plugin, and this plugin has to be able to recognise its own
-    /// rows to withdraw artwork that Fanart.tv no longer lists.
-    /// </remarks>
-    public const DataSource Source = DataSource.FanartTV;
-
-    private bool _templateUrlChecked;
+    private volatile bool _templateUrlRegistered;
 
     /// <summary>
-    /// Registers the Fanart.tv template URL with the server, unless one is
-    /// already set.
+    /// Registers the Fanart.tv template URL with the server as the default for
+    /// <see cref="FanartSources.FanartTV"/>, once.
     /// </summary>
     /// <remarks>
     /// Shoko stores a template URL per image source and rebuilds a remote URL
-    /// as <c>string.Format(template, resourceID)</c>. It ships defaults for
-    /// AniDB, TMDB and AniList only, so without this call
-    /// <c>AddImage</c> throws
-    /// <see cref="MissingImageSourceTemplateUrlException"/> for every Fanart.tv
-    /// image. An existing value is left alone: it is stored in the server's own
-    /// configuration, so a user pointing Fanart.tv at a mirror of their own
-    /// should not have it overwritten on every startup.
+    /// as <c>string.Format(template, resourceID)</c>. The registration is kept
+    /// in memory only, so it has to happen on every start, before any image of
+    /// the source is added or downloaded: without it <c>AddImage</c> throws
+    /// <see cref="MissingImageSourceTemplateUrlException"/>. A template the
+    /// user set for a mirror of their own takes precedence over it on the
+    /// server's side, so the plugin never looks at or writes the user's
+    /// setting.
     /// </remarks>
-    public void EnsureTemplateUrl()
+    public void RegisterTemplateUrl()
     {
-        if (_templateUrlChecked)
+        if (_templateUrlRegistered)
             return;
 
-        _templateUrlChecked = true;
-        if (imageManager.GetTemplateUrlForSource(Source) is { Length: > 0 } existing)
-        {
-            if (!string.Equals(existing, FanartAssetUrl.TemplateUrl, StringComparison.Ordinal))
-                logger.LogInformation("Leaving the existing Fanart.tv image template URL in place. (Template={TemplateUrl})", existing);
-            return;
-        }
-
-        imageManager.SetTemplateUrlForSource(Source, FanartAssetUrl.TemplateUrl);
-        logger.LogInformation("Registered the Fanart.tv image template URL. (Template={TemplateUrl})", FanartAssetUrl.TemplateUrl);
+        imageManager.RegisterTemplateUrl(FanartSources.FanartTV, FanartAssetUrl.TemplateUrl);
+        _templateUrlRegistered = true;
     }
 
     /// <summary>
@@ -105,13 +84,13 @@ public sealed class FanartImageService(
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(artwork);
 
-        EnsureTemplateUrl();
+        RegisterTemplateUrl();
 
         var configuration = configurationProvider.Load();
         var existingCrossReferences = imageManager
             .GetImageCrossReferencesForEntity(entity, new ImageCrossReferenceFilteringOptions()
             {
-                XrefSource = Source,
+                XrefSource = FanartSources.FanartTV,
                 // Only what this entity itself owns. The default walks the
                 // entity's links, and a row belonging to a linked entity is not
                 // ours to withdraw.
@@ -125,7 +104,7 @@ public sealed class FanartImageService(
         var wanted = new HashSet<(ImageEntityType, Guid)>();
         foreach (var entry in artwork)
         {
-            var imageID = IImageManager.GetIDForImageSourceAndResourceID(Source, entry.ResourceID);
+            var imageID = IImageManager.GetIDForImageSourceAndResourceID(FanartSources.FanartTV, entry.ResourceID);
             wanted.Add((entry.ImageType, imageID));
             if (existingCrossReferences.ContainsKey((entry.ImageType, imageID)))
             {
@@ -135,10 +114,10 @@ public sealed class FanartImageService(
 
             try
             {
-                var image = imageManager.GetImageBySourceAndRemoteResourceID(Source, entry.ResourceID)
+                var image = imageManager.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, entry.ResourceID)
                     ?? imageManager.AddImage(new ImageData()
                     {
-                        Source = Source,
+                        Source = FanartSources.FanartTV,
                         ResourceID = entry.ResourceID,
                         Width = entry.Width,
                         Height = entry.Height,
@@ -148,7 +127,7 @@ public sealed class FanartImageService(
                 imageManager.AddImageCrossReference(entity, image, new ImageCrossReferenceData()
                 {
                     ImageType = entry.ImageType,
-                    Source = Source,
+                    Source = FanartSources.FanartTV,
                     IsEnabled = true,
                     IsDesired = configuration.DownloadArtwork,
                     IsPreferred = false,

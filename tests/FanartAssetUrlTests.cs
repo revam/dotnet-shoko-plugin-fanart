@@ -11,7 +11,7 @@ public class FanartAssetUrlTests
     [Fact]
     public void TemplateUrl_HasTheSubstitutionTargetTheServerRequires()
     {
-        // SetTemplateUrlForSource rejects anything that is not an absolute
+        // RegisterTemplateUrl rejects anything that is not an absolute
         // http(s) URL containing {0}.
         Assert.StartsWith("https://", FanartAssetUrl.TemplateUrl, System.StringComparison.Ordinal);
         Assert.Contains("{0}", FanartAssetUrl.TemplateUrl, System.StringComparison.Ordinal);

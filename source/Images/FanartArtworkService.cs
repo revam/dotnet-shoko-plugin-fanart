@@ -48,18 +48,18 @@ public sealed class FanartArtworkService(
         // and is left alone rather than guessed at from its title.
         if (show.TvdbShowID is not > 0)
         {
-            logger.LogDebug("Skipping TMDB show {TmdbShowID} (\"{Title}\") because it has no TheTVDB ID.", show.ID, show.Title);
+            logger.LogDebug("Skipping TMDB show {TmdbShowID} (\"{Title}\") because it has no TheTVDB ID.", show.TmdbID, show.Title);
             return null;
         }
 
         var artworkSet = await apiClient.GetShowArtwork(show.TvdbShowID.Value, cancellationToken).ConfigureAwait(false);
         if (artworkSet is null)
         {
-            logger.LogDebug("Fanart.tv has no artwork for TheTVDB show {TvdbShowID} (TMDB show {TmdbShowID}).", show.TvdbShowID, show.ID);
+            logger.LogDebug("Fanart.tv has no artwork for TheTVDB show {TvdbShowID} (TMDB show {TmdbShowID}).", show.TvdbShowID, show.TmdbID);
             return null;
         }
 
-        return Apply(show, artworkSet, FanartEntityKind.Show, show.ID, show.Title);
+        return Apply(show, artworkSet, FanartEntityKind.Show, show.TmdbID, show.Title);
     }
 
     /// <summary>
@@ -84,14 +84,14 @@ public sealed class FanartArtworkService(
         // The movie endpoint takes a TMDB or an IMDB ID, and Shoko always has
         // the TMDB one for a TMDB movie, so movies need no translation step at
         // all. ImdbMovieID is there as well, and is not needed.
-        var artworkSet = await apiClient.GetMovieArtwork(movie.ID, cancellationToken).ConfigureAwait(false);
+        var artworkSet = await apiClient.GetMovieArtwork(movie.TmdbID, cancellationToken).ConfigureAwait(false);
         if (artworkSet is null)
         {
-            logger.LogDebug("Fanart.tv has no artwork for TMDB movie {TmdbMovieID}.", movie.ID);
+            logger.LogDebug("Fanart.tv has no artwork for TMDB movie {TmdbMovieID}.", movie.TmdbID);
             return null;
         }
 
-        return Apply(movie, artworkSet, FanartEntityKind.Movie, movie.ID, movie.Title);
+        return Apply(movie, artworkSet, FanartEntityKind.Movie, movie.TmdbID, movie.Title);
     }
 
     /// <summary>

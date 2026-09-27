@@ -30,7 +30,7 @@ public static class FanartAssetUrl
 
     /// <summary>
     /// The template URL registered with Shoko for
-    /// <see cref="Shoko.Abstractions.Metadata.Enums.DataSource.FanartTV"/>.
+    /// <see cref="FanartSources.FanartTV"/>.
     /// </summary>
     public const string TemplateUrl = AssetPrefix + "{0}";
 

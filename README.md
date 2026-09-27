@@ -41,12 +41,13 @@ recognised, and dropped.
   everything it is linked to, so artwork attached to the TMDB show appears on
   the series anyway, survives the series being removed and re-added, and is not
   duplicated when two shoko series link to the same TMDB show.
-- **Registering the template URL.** Shoko stores one template URL per image
-  source and rebuilds a download URL as `string.Format(template, resourceID)`.
-  It ships defaults for AniDB, TMDB and AniList only, so the plugin registers
-  `https://assets.fanart.tv/fanart/{0}` for Fanart.tv on first use, and leaves
-  an existing value alone in case you point it at a mirror of your own. Each
-  image's resource ID is the rest of its asset URL. A URL that is not a
+- **Registering the source and template URL.** The plugin registers the
+  `fanart-tv` source, which every image and link it writes is attributed to.
+  Shoko stores one template URL per image source and rebuilds a download URL as
+  `string.Format(template, resourceID)`. It keeps defaults for AniDB and TMDB
+  only, so the plugin registers `https://assets.fanart.tv/fanart/{0}` as the
+  Fanart.tv default on every start. A template you set yourself, say for a
+  mirror of your own, takes precedence over it. Each image's resource ID is the rest of its asset URL. A URL that is not a
   full-size Fanart.tv asset URL, or whose path would not fit the 128 character
   column, is skipped rather than stored as something that cannot be downloaded.
 - **Ordering.** Within one Shoko image type, the asset kind ranks first and the

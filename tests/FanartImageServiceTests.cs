@@ -27,14 +27,14 @@ public class FanartImageServiceTests
         => new(resourceID, imageType, "hdtvlogo", "en", 800, 310, ordering);
 
     private static Guid IdFor(string resourceID)
-        => IImageManager.GetIDForImageSourceAndResourceID(FanartImageService.Source, resourceID);
+        => IImageManager.GetIDForImageSourceAndResourceID(FanartSources.FanartTV, resourceID);
 
     private static IImage ImageFor(string resourceID)
     {
         var image = new Mock<IImage>();
         image.SetupGet(i => i.ID).Returns(IdFor(resourceID));
         image.SetupGet(i => i.ResourceID).Returns(resourceID);
-        image.SetupGet(i => i.Source).Returns(FanartImageService.Source);
+        image.SetupGet(i => i.Source).Returns(FanartSources.FanartTV);
         return image.Object;
     }
 
@@ -43,20 +43,18 @@ public class FanartImageServiceTests
         var xref = new Mock<IImageCrossReference>();
         xref.SetupGet(x => x.ImageID).Returns(IdFor(resourceID));
         xref.SetupGet(x => x.ImageType).Returns(imageType);
-        xref.SetupGet(x => x.Source).Returns(FanartImageService.Source);
+        xref.SetupGet(x => x.Source).Returns(FanartSources.FanartTV);
         xref.SetupGet(x => x.IsPreferred).Returns(isPreferred);
         return xref.Object;
     }
 
     private static (FanartImageService Service, Mock<IImageManager> Manager) CreateService(
         FanartConfiguration? configuration = null,
-        IReadOnlyList<IImageCrossReference>? existing = null,
-        string? templateUrl = null
+        IReadOnlyList<IImageCrossReference>? existing = null
     )
     {
         var manager = new Mock<IImageManager>(MockBehavior.Strict);
-        manager.Setup(m => m.GetTemplateUrlForSource(FanartImageService.Source)).Returns(templateUrl);
-        manager.Setup(m => m.SetTemplateUrlForSource(FanartImageService.Source, It.IsAny<string?>()));
+        manager.Setup(m => m.RegisterTemplateUrl(FanartSources.FanartTV, FanartAssetUrl.TemplateUrl));
         manager.Setup(m => m.GetImageCrossReferencesForEntity(_entity, It.IsAny<ImageCrossReferenceFilteringOptions>()))
             .Returns(existing ?? []);
 
@@ -71,36 +69,26 @@ public class FanartImageServiceTests
     }
 
     [Fact]
-    public void TheTemplateUrlIsRegisteredWhenTheServerHasNone()
+    public void TheTemplateUrlIsRegistered()
     {
-        // The server ships defaults for AniDB, TMDB and AniList only, so
-        // without this every AddImage call throws.
+        // The server keeps defaults for AniDB and TMDB only, so without this
+        // every AddImage call throws.
         var (service, manager) = CreateService();
 
-        service.EnsureTemplateUrl();
+        service.RegisterTemplateUrl();
 
-        manager.Verify(m => m.SetTemplateUrlForSource(FanartImageService.Source, FanartAssetUrl.TemplateUrl), Times.Once);
+        manager.Verify(m => m.RegisterTemplateUrl(FanartSources.FanartTV, FanartAssetUrl.TemplateUrl), Times.Once);
     }
 
     [Fact]
-    public void AnExistingTemplateUrlIsLeftAlone()
-    {
-        var (service, manager) = CreateService(templateUrl: "https://mirror.example.test/{0}");
-
-        service.EnsureTemplateUrl();
-
-        manager.Verify(m => m.SetTemplateUrlForSource(It.IsAny<DataSource>(), It.IsAny<string?>()), Times.Never);
-    }
-
-    [Fact]
-    public void TheTemplateUrlIsOnlyCheckedOnce()
+    public void TheTemplateUrlIsOnlyRegisteredOnce()
     {
         var (service, manager) = CreateService();
 
-        service.EnsureTemplateUrl();
-        service.EnsureTemplateUrl();
+        service.RegisterTemplateUrl();
+        service.RegisterTemplateUrl();
 
-        manager.Verify(m => m.GetTemplateUrlForSource(FanartImageService.Source), Times.Once);
+        manager.Verify(m => m.RegisterTemplateUrl(FanartSources.FanartTV, FanartAssetUrl.TemplateUrl), Times.Once);
     }
 
     [Fact]
@@ -108,7 +96,7 @@ public class FanartImageServiceTests
     {
         var (service, manager) = CreateService();
         var image = ImageFor("tv/1/hdtvlogo/a.png");
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, "tv/1/hdtvlogo/a.png", It.IsAny<bool>())).Returns((IImage?)null);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, "tv/1/hdtvlogo/a.png", It.IsAny<bool>())).Returns((IImage?)null);
         manager.Setup(m => m.AddImage(It.IsAny<ImageData>())).Returns(image);
         manager.Setup(m => m.AddImageCrossReference(_entity, image, It.IsAny<ImageCrossReferenceData>())).Returns(Mock.Of<IImageCrossReference>());
 
@@ -116,7 +104,7 @@ public class FanartImageServiceTests
 
         Assert.Equal(1, changes.Added);
         manager.Verify(m => m.AddImage(It.Is<ImageData>(data =>
-            data.Source == DataSource.FanartTV &&
+            data.Source == FanartSources.FanartTV &&
             data.ResourceID == "tv/1/hdtvlogo/a.png" &&
             data.Width == 800 &&
             data.Height == 310 &&
@@ -126,7 +114,7 @@ public class FanartImageServiceTests
             data.ImageType == ImageEntityType.Logo &&
             // Attributed to Fanart.tv rather than to the user, and not
             // preferred: choosing a preferred image is the user's call.
-            data.Source == DataSource.FanartTV &&
+            data.Source == FanartSources.FanartTV &&
             data.IsEnabled &&
             !data.IsPreferred &&
             data.Ordering == 0
@@ -138,7 +126,7 @@ public class FanartImageServiceTests
     {
         var (service, manager) = CreateService();
         var image = ImageFor("tv/1/hdtvlogo/a.png");
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, "tv/1/hdtvlogo/a.png", It.IsAny<bool>())).Returns(image);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, "tv/1/hdtvlogo/a.png", It.IsAny<bool>())).Returns(image);
         manager.Setup(m => m.AddImageCrossReference(_entity, image, It.IsAny<ImageCrossReferenceData>())).Returns(Mock.Of<IImageCrossReference>());
 
         var changes = service.Apply(_entity, [Artwork("tv/1/hdtvlogo/a.png")]);
@@ -152,7 +140,7 @@ public class FanartImageServiceTests
     {
         var (service, manager) = CreateService(new FanartConfiguration() { DownloadArtwork = false });
         var image = ImageFor("tv/1/hdtvlogo/a.png");
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
         manager.Setup(m => m.AddImageCrossReference(_entity, image, It.IsAny<ImageCrossReferenceData>())).Returns(Mock.Of<IImageCrossReference>());
 
         service.Apply(_entity, [Artwork("tv/1/hdtvlogo/a.png")]);
@@ -181,7 +169,7 @@ public class FanartImageServiceTests
         // The dedup key is the image and the image type, not the image alone.
         var (service, manager) = CreateService(existing: [CrossReferenceFor("tv/1/a.png", ImageEntityType.Logo)]);
         var image = ImageFor("tv/1/a.png");
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
         manager.Setup(m => m.AddImageCrossReference(_entity, image, It.IsAny<ImageCrossReferenceData>())).Returns(Mock.Of<IImageCrossReference>());
 
         var changes = service.Apply(_entity, [Artwork("tv/1/a.png", ImageEntityType.Logo), Artwork("tv/1/a.png", ImageEntityType.Banner)]);
@@ -232,7 +220,7 @@ public class FanartImageServiceTests
     {
         var (service, manager) = CreateService();
         var image = ImageFor("tv/1/hdtvlogo/a.png");
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, It.IsAny<string>(), It.IsAny<bool>())).Returns(image);
         manager.Setup(m => m.AddImageCrossReference(_entity, image, It.IsAny<ImageCrossReferenceData>()))
             .Throws(new ImageCrossReferenceExistsException()
             {
@@ -252,10 +240,10 @@ public class FanartImageServiceTests
     public void AnImageTypeShokoRefusesIsCountedAndSkipped()
     {
         var (service, manager) = CreateService();
-        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartImageService.Source, It.IsAny<string>(), It.IsAny<bool>())).Returns((IImage?)null);
+        manager.Setup(m => m.GetImageBySourceAndRemoteResourceID(FanartSources.FanartTV, It.IsAny<string>(), It.IsAny<bool>())).Returns((IImage?)null);
         manager.Setup(m => m.AddImage(It.IsAny<ImageData>())).Throws(new UnsupportedImageTypeException()
         {
-            ImageSource = FanartImageService.Source,
+            ImageSource = FanartSources.FanartTV,
             ImageResourceID = "tv/1/hdtvlogo/a.svg",
             FileExtension = ".svg",
             DetectedMimeType = "image/svg+xml",
@@ -278,7 +266,7 @@ public class FanartImageServiceTests
 
         manager.Verify(m => m.GetImageCrossReferencesForEntity(_entity, It.Is<ImageCrossReferenceFilteringOptions>(options =>
             options.LinkedEntityImages == false &&
-            options.XrefSource == DataSource.FanartTV
+            options.XrefSource == FanartSources.FanartTV
         )), Times.Once);
     }
 }
