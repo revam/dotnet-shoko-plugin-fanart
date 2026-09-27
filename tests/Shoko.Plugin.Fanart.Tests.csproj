@@ -27,8 +27,8 @@
     exactly the contract it was built for.
   -->
   <ItemGroup>
-    <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.89" />
-    <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.6" />
+    <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.95" />
+    <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.9" />
   </ItemGroup>
 
   <ItemGroup>

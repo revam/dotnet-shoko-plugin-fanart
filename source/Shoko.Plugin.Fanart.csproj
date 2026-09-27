@@ -28,8 +28,8 @@
         output.
     -->
     <ItemGroup>
-        <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.89" ExcludeAssets="runtime" />
-        <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.6" ExcludeAssets="runtime;native" />
+        <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.95" ExcludeAssets="runtime" />
+        <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.9" ExcludeAssets="runtime;native" />
     </ItemGroup>
 
     <ItemGroup>
