@@ -19,23 +19,18 @@
     </ItemGroup>
 
     <!--
-        The server supplies the abstractions and the queue engine at runtime, so
-        only compile-time assets are referenced here. A plugin that ships its own
-        copy of Shoko.Abstractions resolves IPlugin against that copy, and the
-        server skips it without an error. `native` goes with `runtime`: on its
-        own `runtime` leaves the queue engine's transitive SQLite and SqlClient
-        packages free to drop their whole `runtimes/` tree into the plugin
-        output.
+        The server supplies the abstractions at runtime, so only compile-time
+        assets are referenced here. A plugin that ships its own copy of
+        Shoko.Abstractions resolves IPlugin against that copy, and the server
+        skips it without an error.
     -->
     <ItemGroup>
         <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.95" ExcludeAssets="runtime" />
-        <PackageReference Include="Shoko.QueueProcessor" Version="6.0.0-alpha.9" ExcludeAssets="runtime;native" />
     </ItemGroup>
 
     <ItemGroup>
-        <!-- Pulls in Microsoft.Extensions.{Logging,DependencyInjection,Hosting,Http}
-             for us, and is required for IPluginApplicationRegistration's
-             IApplicationBuilder parameter used to register the recurring sweep job. -->
+        <!-- Pulls in Microsoft.Extensions.{Logging,DependencyInjection,Http}
+             for us, the last of them for the typed HTTP client. -->
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 

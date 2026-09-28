@@ -1,20 +1,18 @@
 using System;
 using System.Net.Http.Headers;
 using System.Threading;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Shoko.Abstractions.Config;
+using Shoko.Abstractions.Metadata.Services;
 using Shoko.Abstractions.Plugin;
 using Shoko.Plugin.Fanart.Api;
-using Shoko.Plugin.Fanart.Images;
-using Shoko.Plugin.Fanart.Jobs;
-using Shoko.QueueProcessor.Scheduling;
+using Shoko.Plugin.Fanart.Mapping;
 
 namespace Shoko.Plugin.Fanart;
 
 /// <summary>
 /// Plugin contributing series and movie artwork from
-/// <see href="https://fanart.tv"/> through Shoko's image manager.
+/// <see href="https://fanart.tv"/>, as an image contributor the core asks
+/// whenever it refreshes an entry's images.
 /// </summary>
 /// <remarks>
 /// This class carries the plugin's identity and nothing else. It is built twice
@@ -22,9 +20,9 @@ namespace Shoko.Plugin.Fanart;
 /// <c>Activator.CreateInstance</c> before any container exists, so it must keep
 /// a public parameterless constructor and take no dependencies at all.
 /// Everything the plugin needs is registered in <see cref="RegisterServices(IServiceCollection, IApplicationPaths)"/>
-/// instead.
+/// instead, and the template URL in <see cref="Setup(IServiceProvider)"/>.
 /// </remarks>
-public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationRegistration
+public class Plugin : IPlugin, IPluginServiceRegistration
 {
     /// <inheritdoc/>
     public Guid ID { get; private init; } = new("3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b");
@@ -34,9 +32,9 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
 
     /// <inheritdoc/>
     public string Description { get; private set; } = """
-        Adds series and movie artwork from Fanart.tv to TMDB-linked entries, keyed through
-        the TheTVDB ID for shows and the TMDB ID for movies. Requires your own Fanart.tv
-        API key.
+        Adds series and movie artwork from Fanart.tv to TMDB's series and movies, and to
+        TheTVDB's series when a plugin provides them, keyed through the TheTVDB ID for series
+        and the TMDB ID for movies. Requires your own Fanart.tv API key.
     """;
 
     /// <inheritdoc/>
@@ -46,14 +44,10 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
         // source before the server closes registration.
         _ = FanartSources.FanartTV;
 
-        // Registered as concrete singletons because this plugin's own code
-        // resolves them: the sweep job, the two actions and the API client all
-        // share one rate limiter and one HTTP client. Nothing here is a
-        // contract the server discovers, so nothing is registered under an
-        // interface.
+        // The image contributor is found and built by the server itself; the
+        // rate limiter is registered here so every request it makes shares
+        // one budget.
         serviceCollection.AddSingleton<FanartRateLimiter>();
-        serviceCollection.AddSingleton<FanartImageService>();
-        serviceCollection.AddSingleton<FanartArtworkService>();
 
         serviceCollection
             // The contact URL is read back from the plugin's own registered info
@@ -82,18 +76,12 @@ public class Plugin : IPlugin, IPluginServiceRegistration, IPluginApplicationReg
     }
 
     /// <inheritdoc/>
-    public static void RegisterServices(IApplicationBuilder application, IApplicationPaths applicationPaths)
+    public void Setup(IServiceProvider serviceProvider)
     {
-        var services = application.ApplicationServices;
-        var configuration = services.GetRequiredService<ConfigurationProvider<FanartConfiguration>>().Load();
-
         // The server keeps the template URL in memory only, and downloads of
         // artwork added before this start need it as much as new artwork does.
-        services.GetRequiredService<FanartImageService>().RegisterTemplateUrl();
-
-        // This is the first point at which the container is built, which is
-        // what the recurring job registry needs.
-        var registry = services.GetRequiredService<RecurringJobRegistry>();
-        registry.Register<FanartSweepJob>(interval: configuration.SweepInterval, runImmediately: false);
+        // A template the user set for a mirror of their own takes precedence
+        // over it on the server's side.
+        serviceProvider.GetRequiredService<IImageManager>().RegisterTemplateUrl(FanartSources.FanartTV, FanartAssetUrl.TemplateUrl);
     }
 }

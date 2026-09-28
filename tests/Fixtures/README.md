@@ -14,9 +14,8 @@ and its README) rather than anything the live API actually returned.
 What that means for the tests that read them:
 
 - They prove the plugin does what it intends with that shape: which asset kinds
-  are mapped, which are dropped, how artwork is ordered and capped, what a
-  missing or malformed field does, and what is written through the image
-  manager.
+  are mapped, which are dropped, how artwork is ordered, what a missing or
+  malformed field does, and what the contributor answers the server with.
 - They cannot prove the shape itself is right. If the live API differs, these
   tests will keep passing and the plugin will still be wrong.
 

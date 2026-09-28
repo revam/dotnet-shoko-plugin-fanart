@@ -13,8 +13,8 @@ namespace Shoko.Plugin.Fanart.Api;
 /// and answers with HTTP 429 and a <c>Retry-After</c> header when that happens
 /// (<see cref="FanartApiClient"/> honours it). The defaults here, a burst of
 /// five refilling at two per second, are therefore a politeness budget rather
-/// than a documented limit: a full sweep of a large collection is spread over
-/// minutes instead of arriving all at once.
+/// than a documented limit: refreshing the images of a large collection is
+/// spread over minutes instead of arriving all at once.
 /// </remarks>
 public sealed class FanartRateLimiter : IDisposable
 {

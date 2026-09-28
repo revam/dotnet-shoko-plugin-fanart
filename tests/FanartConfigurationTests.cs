@@ -37,25 +37,6 @@ public class FanartConfigurationTests
     }
 
     [Fact]
-    public void ADefaultConfigurationSweepsWeeklyBecauseThatIsHowOftenArtworkReachesAProjectKey()
-    {
-        var configuration = new FanartConfiguration();
-
-        Assert.Equal(7, configuration.SweepInterval.TotalDays);
-    }
-
-    [Fact]
-    public void ADefaultConfigurationIsConservativeAboutHowMuchItAdds()
-    {
-        var configuration = new FanartConfiguration();
-
-        Assert.Equal(5, configuration.MaximumImagesPerType);
-        Assert.True(configuration.DownloadArtwork);
-        Assert.True(configuration.IncludeMovies);
-        Assert.True(configuration.RemoveWithdrawnArtwork);
-    }
-
-    [Fact]
     public void TheClientReportsAMissingKeyWithoutThrowing()
     {
         var configurationService = new FakeConfigurationService(new FanartConfiguration());

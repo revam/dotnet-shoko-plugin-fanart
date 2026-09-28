@@ -8,15 +8,15 @@ using Xunit;
 namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
-/// What is kept from a response, in what order, and how much of it.
+/// What is kept from a response, and in what order.
 /// </summary>
 public class FanartArtworkSelectorTests
 {
     private static FanartArtworkSet Parse(string fixture)
         => JsonSerializer.Deserialize<FanartArtworkSet>(Fixture.Read(fixture), FanartJson.Options)!;
 
-    private static FanartArtwork[] Select(string fixture, FanartEntityKind kind, int maximumPerType = 10)
-        => [.. FanartArtworkSelector.Select(Parse(fixture), kind, maximumPerType)];
+    private static FanartArtwork[] Select(string fixture, FanartEntityKind kind)
+        => [.. FanartArtworkSelector.Select(Parse(fixture), kind)];
 
     [Fact]
     public void Show_KeepsOnlyTheMappedKinds()
@@ -57,7 +57,6 @@ public class FanartArtworkSelectorTests
             .ToArray();
 
         Assert.Equal("show4kbackground", backdrops[0].Kind);
-        Assert.Equal(0, backdrops[0].Ordering);
     }
 
     [Fact]
@@ -70,7 +69,6 @@ public class FanartArtworkSelectorTests
         // clearlogo has 40 likes against hdtvlogo's 12 and 3, and still comes
         // last: the kind decides first, likes only order within a kind.
         Assert.Equal(["hdtvlogo", "hdtvlogo", "clearlogo"], logos.Select(entry => entry.Kind).ToArray());
-        Assert.Equal([0, 1, 2], logos.Select(entry => entry.Ordering).ToArray());
     }
 
     [Fact]
@@ -104,12 +102,17 @@ public class FanartArtworkSelectorTests
     }
 
     [Fact]
-    public void MaximumPerType_CapsEachTypeSeparatelyAndRenumbers()
+    public void EveryMappedImageIsOffered()
     {
-        var artwork = Select("tv-76885.json", FanartEntityKind.Show, maximumPerType: 1);
+        // How many are downloaded is the core's call, from the admin's image
+        // settings, so nothing is capped here.
+        var set = Parse("tv-76885.json");
+        var mapped = set.GetArtworkGroups()
+            .Where(group => FanartArtworkMap.TryGet(FanartEntityKind.Show, group.Kind, out _))
+            .SelectMany(group => group.Images)
+            .Count(image => FanartAssetUrl.TryGetResourceID(image.Url, out _));
 
-        Assert.Equal(4, artwork.Length);
-        Assert.All(artwork, entry => Assert.Equal(0, entry.Ordering));
+        Assert.Equal(mapped, Select("tv-76885.json", FanartEntityKind.Show).Length);
     }
 
     [Fact]
@@ -150,7 +153,7 @@ public class FanartArtworkSelectorTests
             FanartJson.Options
         )!;
 
-        var artwork = FanartArtworkSelector.Select(duplicated, FanartEntityKind.Show, 10);
+        var artwork = FanartArtworkSelector.Select(duplicated, FanartEntityKind.Show);
 
         Assert.Single(artwork);
     }
@@ -158,8 +161,8 @@ public class FanartArtworkSelectorTests
     [Fact]
     public void SelectionIsStableAcrossRuns()
     {
-        // Two sweeps over unchanged artwork must produce the same ordering, or
-        // every sweep rewrites rows that did not change.
+        // Two refreshes over unchanged artwork must produce the same ordering,
+        // or every refresh rewrites rows that did not change.
         var first = Select("tv-76885.json", FanartEntityKind.Show);
         var second = Select("tv-76885.json", FanartEntityKind.Show);
 
