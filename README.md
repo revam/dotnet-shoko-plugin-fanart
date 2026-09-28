@@ -92,9 +92,12 @@ which also removes the links this plugin added on that pair.
   never deleted, only the link. When Fanart.tv answers "not found" for the
   whole show or movie, or the key is missing or rejected, the links already
   there are left as they are.
-- **Refreshing by hand.** The server's own image actions, such as "Update TMDB
-  Images - Force" on a series, queue this contributor too, so the plugin
-  registers no actions of its own.
+- **Refreshing by hand.** The "Refresh Fanart.tv Artwork" series action, open
+  to every user, asks the server for the images of each linked series and
+  movie the contributor is enabled for. That runs the owner's image job
+  without forcing anything already downloaded, and the contributor after it.
+  The server's own image actions, such as "Update TMDB Images - Force", queue
+  this contributor too.
 
 ## Artwork mapping
 
@@ -214,7 +217,7 @@ directory's `plugins/` folder.
 
 To check it against a running server: set an API key, then
 `GET /api/v3/Metadata/ImageContributor` should list "Fanart.tv" with the pairs
-above. Run the "Update TMDB Images - Force" action on a series linked to a
+above. Run the "Refresh Fanart.tv Artwork" action on a series linked to a
 show with a TheTVDB ID, wait for its `Download Contributed Images` job, and the
 series' images (`GET /api/v3/Series/{id}/Images?includeDisabled=true`) should
 hold `fanart-tv` artwork.
