@@ -17,6 +17,22 @@
   ],
   "releases": [
     {
+      "version": "1.1.0",
+      "tag": "v1.1.0",
+      "released_at": "2026-09-30T16:38:04.7104329Z",
+      "channel": "Stable",
+      "release_notes": "Fanart.tv artwork now comes in through Shoko\u0027s image contributor system instead of the plugin\u0027s own weekly sweep. Whenever Shoko refreshes the images of a TMDB show or movie, it asks the plugin for that entry\u0027s artwork, and with the TheTVDB plugin installed it does the same for TheTVDB series, which are looked up by their own TheTVDB ID. Which of these the plugin adds artwork to can be switched per source and kind under the server\u0027s image contributor settings, and how many images of each type are downloaded is now set in the server\u0027s image settings for the Fanart.tv source. The sweep interval, movie, image count, download and withdrawn artwork settings are gone, and so is the collection-wide sweep action; the per-series \u0022Refresh Fanart.tv Artwork\u0022 action is still there, open to every user, and refreshes the artwork of each linked show, series and movie. Artwork and links are kept under the \u0060fanart-tv\u0060 source.\n\nRequires Shoko Server with abstractions \u00606.0.0-alpha.95\u0060.",
+      "dependencies": [],
+      "archives": [
+        {
+          "runtime": "any",
+          "abstraction": "6.0.0",
+          "url": "https://github.com/revam/dotnet-shoko-plugin-fanart/releases/download/v1.1.0/Fanart.tvArtwork-v1.1.0-any.zip",
+          "checksum": "sha256:e74f1f292c53e5ae4b4284c7745ee1376b7f6e88f0b99af964fa56ce167c01ec"
+        }
+      ]
+    },
+    {
       "version": "1.0.0",
       "tag": "v1.0.0",
       "released_at": "2026-09-18T15:56:05.9573935Z",
