@@ -123,6 +123,19 @@ public class FanartImageContributorTests
     }
 
     [Fact]
+    public void TheScopeFindsTheTvdbSourceByItsRegisteredName()
+    {
+        // Only the value is shared with the TheTVDB plugin, never its assembly.
+        // Registered first, as the plugin does before the core reads the scope.
+        var tvdb = _tvdb;
+        var (contributor, _) = CreateContributor(new UnreachableHttpMessageHandler());
+
+        Assert.True(contributor.Scope.Contains(tvdb, MetadataEntityType.Series));
+        Assert.True(contributor.Scope.Contains(MetadataSource.TMDB, MetadataEntityType.Series));
+        Assert.True(contributor.Scope.Contains(MetadataSource.TMDB, MetadataEntityType.Movie));
+    }
+
+    [Fact]
     public void TheScopeNeverHoldsTheContributorsOwnSource()
     {
         // The core drops such a pair, and refuses a contributor left with none.
@@ -233,6 +246,20 @@ public class FanartImageContributorTests
         );
         Assert.NotNull(candidates);
         Assert.Equal(expected.Select(entry => (entry.ResourceID, entry.ImageType)), candidates.Select(candidate => (candidate.ResourceID, candidate.ImageType)));
+    }
+
+    [Fact]
+    public async Task ATvdbSeries_IsAskedForThroughTheTvEndpoint()
+    {
+        var handler = new StubHttpMessageHandler().Enqueue(HttpStatusCode.OK, Fixture.Read("tv-76885.json"));
+        var (contributor, _) = CreateContributor(handler);
+
+        var candidates = await contributor.GetImages(Series(new MetadataGuid(_tvdb, MetadataEntityType.Series, "76885")), TestContext.Current.CancellationToken);
+
+        Assert.Equal("https://webservice.fanart.tv/v3.2/tv/76885?api_key=project-key", Assert.Single(handler.Requests));
+        Assert.NotNull(candidates);
+        Assert.NotEmpty(candidates);
+        Assert.DoesNotContain(candidates, candidate => candidate.ImageType is ImageEntityType.Disc);
     }
 
     [Fact]
