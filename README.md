@@ -14,11 +14,11 @@ by people rather than scraped off a distributor's press kit.
 **Series and movie artwork only.** No season artwork, and no episode artwork.
 
 That is a deliberate limit rather than a missing feature. Fanart.tv numbers its
-season artwork by TheTVDB seasons, and Shoko's seasons come from TMDB. The two
-agree often enough to be tempting and disagree often enough to be wrong, and
-there is no honest way to attach a TheTVDB season 2 poster to a TMDB season 2
-unless the two happen to agree on both season and episode counts. So
-`seasonposter`, `seasonthumb` and `seasonbanner` are read from the response,
+season artwork by TheTVDB seasons, and a series' seasons in Shoko mostly come
+from TMDB. The two agree often enough to be tempting and disagree often enough
+to be wrong, and there is no honest way to attach a TheTVDB season 2 poster to a
+TMDB season 2 unless the two happen to agree on both season and episode counts.
+So `seasonposter`, `seasonthumb` and `seasonbanner` are read from the response,
 recognised, and dropped.
 
 The contributor covers these source and kind pairs:
@@ -36,13 +36,13 @@ which also removes the links this plugin added on that pair.
 ## How it works
 
 - **When it runs.** The plugin has no schedule of its own. Whenever Shoko
-  refreshes an entry's images (after the owning source's image job, TMDB's for
-  a show or movie, after a refresh that fetched images, or when someone asks
-  for the entry's images through an image action), it queues one
-  `DownloadContributedImagesJob` for this contributor. That job hands each
-  series or movie of an enabled pair to the plugin, which answers with the
-  artwork Fanart.tv lists for it. At most two of these jobs run at once, and
-  every request also waits on the plugin's own rate limiter.
+  refreshes an entry's images (after the owning source's image job, TMDB's for a
+  show or movie or the TheTVDB plugin's for a series, after a refresh that
+  fetched images, or when someone asks for the entry's images through an image
+  action), it queues one `DownloadContributedImagesJob` for this contributor.
+  That job hands each series or movie of an enabled pair to the plugin, which
+  answers with the artwork Fanart.tv lists for it. At most two of these jobs run
+  at once, and every request also waits on the plugin's own rate limiter.
 - **Keying, for shows.** Fanart.tv's TV API is keyed by TheTVDB ID and has no
   other way in. A TMDB show carries a `TvdbShowID`, TMDB is what supplies that
   translation, and Shoko already stores it, so the whole lookup path is
@@ -58,12 +58,13 @@ which also removes the links this plugin added on that pair.
   always has the TMDB one for a TMDB movie, so movies need no translation step
   and no extra coverage caveat. `ImdbMovieID` is stored on TMDB movies as well
   and is not needed.
-- **What the artwork is attached to.** The TMDB show or movie itself, not the
-  shoko series in front of it. A shoko series already reads the images of
-  everything it is linked to, so artwork attached to the TMDB show appears on
-  the series anyway, survives the series being removed and re-added, and is not
-  duplicated when two shoko series link to the same TMDB show. The core keeps
-  the links under the `fanart-tv` source, apart from TMDB's own.
+- **What the artwork is attached to.** The TMDB show or movie, or the TheTVDB
+  series, itself, not the shoko series in front of it. A shoko series already
+  reads the images of everything it is linked to, so artwork attached to the
+  TMDB show appears on the series anyway, survives the series being removed and
+  re-added, and is not duplicated when two shoko series link to the same TMDB
+  show. The core keeps the links under the `fanart-tv` source, apart from the
+  owning source's own.
 - **Registering the source and template URL.** The plugin registers the
   `fanart-tv` source, which every image and link it writes is attributed to.
   Shoko stores one template URL per image source and rebuilds a download URL as
