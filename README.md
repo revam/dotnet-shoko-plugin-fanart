@@ -44,9 +44,9 @@ which also removes the links this plugin added on that pair.
   answers with the artwork Fanart.tv lists for it. At most two of these jobs run
   at once, and every request also waits on the plugin's own rate limiter.
 - **Keying, for shows.** Fanart.tv's TV API is keyed by TheTVDB ID and has no
-  other way in. A TMDB show carries a `TvdbShowID`, TMDB is what supplies that
-  translation, and Shoko already stores it, so the whole lookup path is
-  `TMDB show -> TvdbShowID -> GET /v3.2/tv/{tvdb_id}`. No Trakt, no TheTVDB API
+  other way in. A TMDB show lists its TheTVDB ID among its cross-source IDs,
+  TMDB is what supplies that translation, and Shoko already stores it, so the
+  whole lookup path is `TMDB show -> TheTVDB ID -> GET /v3.2/tv/{tvdb_id}`. No Trakt, no TheTVDB API
   key, and no community mapping list. A TheTVDB series is looked up by its own
   ID, and any other series by the TheTVDB ID it lists among its cross-source
   IDs.

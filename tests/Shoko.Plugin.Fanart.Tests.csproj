@@ -27,7 +27,7 @@
     exactly the contract it was built for.
   -->
   <ItemGroup>
-    <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.95" />
+    <PackageReference Include="Shoko.Abstractions" Version="6.0.0-alpha.98" />
   </ItemGroup>
 
   <ItemGroup>

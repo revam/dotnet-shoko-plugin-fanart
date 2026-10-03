@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Shoko.Abstractions.Metadata;
 using Shoko.Abstractions.Metadata.Image;
 using Shoko.Abstractions.Metadata.Providers;
-using Shoko.Abstractions.Metadata.Tmdb;
 using Shoko.Plugin.Fanart.Api;
 using Shoko.Plugin.Fanart.Mapping;
 
@@ -179,26 +178,15 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
         ArgumentNullException.ThrowIfNull(entity);
         switch (entity)
         {
-            // TMDB supplies the translation to TheTVDB, and Shoko stores it.
-            case ITmdbShow { TvdbShowID: > 0 and var tvdbShowID }:
-                entityKind = FanartEntityKind.Show;
-                lookupID = tvdbShowID;
-                return true;
-
-            // A TheTVDB series, or any other series listing its TheTVDB ID.
+            // A TheTVDB series, or any other series listing its TheTVDB ID,
+            // as TMDB's shows do.
             case ISeries series when FindNumericID(series.ID, series.CrossSourceIDs, TvdbSourceValue, MetadataEntityType.Series) is { } tvdbShowID:
                 entityKind = FanartEntityKind.Show;
                 lookupID = tvdbShowID;
                 return true;
 
-            // Shoko always has the TMDB ID of a TMDB movie, which the movie
-            // endpoint takes as it is.
-            case ITmdbMovie { TmdbID: > 0 and var tmdbMovieID }:
-                entityKind = FanartEntityKind.Movie;
-                lookupID = tmdbMovieID;
-                return true;
-
-            // Any other movie listing its TMDB ID.
+            // A TMDB movie, or any other movie listing its TMDB ID, which the
+            // movie endpoint takes as it is.
             case IMovie movie when FindNumericID(movie.ID, movie.CrossSourceIDs, MetadataSource.TMDB.Value, MetadataEntityType.Movie) is { } tmdbMovieID:
                 entityKind = FanartEntityKind.Movie;
                 lookupID = tmdbMovieID;

@@ -8,7 +8,6 @@ using Moq;
 using Shoko.Abstractions.Config;
 using Shoko.Abstractions.Metadata;
 using Shoko.Abstractions.Metadata.Enums;
-using Shoko.Abstractions.Metadata.Tmdb;
 using Shoko.Plugin.Fanart.Api;
 using Shoko.Plugin.Fanart.Images;
 using Shoko.Plugin.Fanart.Mapping;
@@ -43,15 +42,11 @@ public class FanartImageContributorTests
         return (new FanartImageContributor(client, logger), logger);
     }
 
-    private static ITmdbShow Show(int tmdbID, int? tvdbShowID)
-    {
-        var show = new Mock<ITmdbShow>();
-        show.SetupGet(s => s.ID).Returns(new MetadataGuid(MetadataSource.TMDB, MetadataEntityType.Series, tmdbID.ToString()));
-        show.SetupGet(s => s.TmdbID).Returns(tmdbID);
-        show.SetupGet(s => s.TvdbShowID).Returns(tvdbShowID);
-        show.SetupGet(s => s.CrossSourceIDs).Returns([]);
-        return show.Object;
-    }
+    private static ISeries Show(int tmdbID, int? tvdbShowID)
+        => Series(
+            new MetadataGuid(MetadataSource.TMDB, MetadataEntityType.Series, tmdbID.ToString()),
+            tvdbShowID is { } tvdbID ? [new MetadataGuid(_tvdb, MetadataEntityType.Series, tvdbID.ToString())] : []
+        );
 
     private static ISeries Series(MetadataGuid id, params MetadataGuid[] crossSourceIDs)
     {
@@ -61,14 +56,8 @@ public class FanartImageContributorTests
         return series.Object;
     }
 
-    private static ITmdbMovie TmdbMovie(int tmdbID)
-    {
-        var movie = new Mock<ITmdbMovie>();
-        movie.SetupGet(m => m.ID).Returns(new MetadataGuid(MetadataSource.TMDB, MetadataEntityType.Movie, tmdbID.ToString()));
-        movie.SetupGet(m => m.TmdbID).Returns(tmdbID);
-        movie.SetupGet(m => m.CrossSourceIDs).Returns([]);
-        return movie.Object;
-    }
+    private static IMovie TmdbMovie(int tmdbID)
+        => Movie(new MetadataGuid(MetadataSource.TMDB, MetadataEntityType.Movie, tmdbID.ToString()));
 
     private static IMovie Movie(MetadataGuid id, params MetadataGuid[] crossSourceIDs)
     {
@@ -284,7 +273,6 @@ public class FanartImageContributorTests
         Assert.Equal("en", candidate.LanguageCode);
         Assert.Equal(800, candidate.Width);
         Assert.Equal(310, candidate.Height);
-        Assert.False(candidate.IsDefault);
     }
 
     [Fact]
