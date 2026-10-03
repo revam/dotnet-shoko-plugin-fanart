@@ -24,6 +24,17 @@ namespace Shoko.Plugin.Fanart;
 /// </remarks>
 public class Plugin : IPlugin, IPluginServiceRegistration
 {
+    /// <summary>
+    /// The embedded resource of the plugin's thumbnail.
+    /// </summary>
+    internal const string ThumbnailResourceName = "Shoko.Plugin.Fanart.Assets.thumbnail.svg";
+
+    /// <summary>
+    /// The embedded resource of the plugin's icon, which is the image
+    /// contributor's icon too.
+    /// </summary>
+    internal const string IconResourceName = "Shoko.Plugin.Fanart.Assets.icon.svg";
+
     /// <inheritdoc/>
     public Guid ID { get; private init; } = new("3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b");
 
@@ -36,6 +47,12 @@ public class Plugin : IPlugin, IPluginServiceRegistration
         TheTVDB's series when a plugin provides them, keyed through the TheTVDB ID for series
         and the TMDB ID for movies. Requires your own Fanart.tv API key.
     """;
+
+    /// <inheritdoc/>
+    public string? EmbeddedThumbnailResourceName => ThumbnailResourceName;
+
+    /// <inheritdoc/>
+    public string? EmbeddedIconResourceName => IconResourceName;
 
     /// <inheritdoc/>
     public static void RegisterServices(IServiceCollection serviceCollection, IApplicationPaths applicationPaths)

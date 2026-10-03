@@ -73,6 +73,9 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
     public MetadataSource Source => FanartSources.FanartTV;
 
     /// <inheritdoc/>
+    public string? EmbeddedIconResourceName => Plugin.IconResourceName;
+
+    /// <inheritdoc/>
     /// <remarks>
     /// TMDB's series and movies, and TheTVDB's series when a plugin registered
     /// that source. Read once by the core, after every plugin registered its

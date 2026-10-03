@@ -84,6 +84,14 @@ public class FanartImageContributorTests
     }
 
     [Fact]
+    public void TheContributorIconIsThePluginIcon()
+    {
+        var (contributor, _) = CreateContributor(new UnreachableHttpMessageHandler());
+
+        Assert.Equal(new Plugin().EmbeddedIconResourceName, contributor.EmbeddedIconResourceName);
+    }
+
+    [Fact]
     public void TheJobPoolIsSmall()
     {
         var (contributor, _) = CreateContributor(new UnreachableHttpMessageHandler());
