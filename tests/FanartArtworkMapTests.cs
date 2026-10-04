@@ -6,7 +6,7 @@ using Xunit;
 namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
-/// Which Fanart.tv asset kinds become which Shoko image type, and which are
+/// Which fanart.tv asset kinds become which Shoko image type, and which are
 /// deliberately left behind.
 /// </summary>
 public class FanartArtworkMapTests

@@ -13,7 +13,7 @@ internal static class Constants
     /// either way.
     /// </summary>
     /// <remarks>
-    /// Fanart.tv's terms ask that a program send its own project key and let a
+    /// fanart.tv's terms ask that a program send its own project key and let a
     /// user add their personal key alongside it, which is why the project key
     /// belongs to the build and the personal key belongs to the user. An
     /// unofficial build leaves the placeholder in place and the plugin then

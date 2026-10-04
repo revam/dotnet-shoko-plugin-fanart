@@ -13,7 +13,7 @@ using Shoko.Plugin.Fanart.Mapping;
 namespace Shoko.Plugin.Fanart.Images;
 
 /// <summary>
-/// Adds Fanart.tv artwork to other sources' series and movies, as the core's
+/// Adds fanart.tv artwork to other sources' series and movies, as the core's
 /// image contributor.
 /// </summary>
 /// <remarks>
@@ -26,7 +26,7 @@ namespace Shoko.Plugin.Fanart.Images;
 /// listed are removed.
 /// </para>
 /// <para>
-/// Fanart.tv's TV API is keyed by TheTVDB ID and its movie API by TMDB ID, so
+/// fanart.tv's TV API is keyed by TheTVDB ID and its movie API by TMDB ID, so
 /// a series is looked up by the TheTVDB ID it carries and a movie by its TMDB
 /// ID. An entity with no such ID is left alone rather than guessed at from
 /// its title.
@@ -61,11 +61,11 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
     #region Identity
 
     /// <inheritdoc/>
-    public string Name => "Fanart.tv";
+    public string Name => "fanart.tv";
 
     /// <inheritdoc/>
     public string? Description => """
-        Adds posters, backdrops, logos, banners and movie disc art from Fanart.tv, looking up
+        Adds posters, backdrops, logos, banners and movie disc art from fanart.tv, looking up
         series by their TheTVDB ID and movies by their TMDB ID.
     """;
 
@@ -92,25 +92,25 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
 
     /// <inheritdoc/>
     /// <exception cref="FanartApiException">
-    /// Thrown when Fanart.tv answers with an error other than a rejected key,
+    /// Thrown when fanart.tv answers with an error other than a rejected key,
     /// so the core's job fails and is retried.
     /// </exception>
     public async Task<IReadOnlyList<ImageCandidate>?> GetImages(IMetadata entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        // No key, no access: Fanart.tv has no anonymous tier. That is the
+        // No key, no access: fanart.tv has no anonymous tier. That is the
         // ordinary state of a fresh install, so it is said once per start.
         if (!apiClient.HasApiKey)
         {
             if (Interlocked.Exchange(ref _missingKeyReported, 1) is 0)
-                logger.LogInformation("Not adding Fanart.tv artwork because no API key is configured. Add one under the plugin's settings.");
+                logger.LogInformation("Not adding fanart.tv artwork because no API key is configured. Add one under the plugin's settings.");
             return null;
         }
 
         if (!TryGetLookup(entity, out var entityKind, out var lookupID))
         {
-            logger.LogDebug("Not adding Fanart.tv artwork to {Entity}, which has no ID Fanart.tv is keyed by.", entity.ID);
+            logger.LogDebug("Not adding fanart.tv artwork to {Entity}, which has no ID fanart.tv is keyed by.", entity.ID);
             return null;
         }
 
@@ -125,15 +125,15 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
         {
             // Retrying will not fix a rejected key, so the job is not failed
             // over it and the links already there are left alone.
-            logger.LogWarning(ex, "Not adding Fanart.tv artwork to {Entity}: the API key was rejected.", entity.ID);
+            logger.LogWarning(ex, "Not adding fanart.tv artwork to {Entity}: the API key was rejected.", entity.ID);
             return null;
         }
 
-        // Fanart.tv answers "not found" for an ID it has no artwork for, which
+        // fanart.tv answers "not found" for an ID it has no artwork for, which
         // is most of a library. The links already there are left alone.
         if (artworkSet is null)
         {
-            logger.LogDebug("Fanart.tv has no artwork for {Entity} ({EntityKind} {LookupID}).", entity.ID, entityKind, lookupID);
+            logger.LogDebug("fanart.tv has no artwork for {Entity} ({EntityKind} {LookupID}).", entity.ID, entityKind, lookupID);
             return null;
         }
 
@@ -165,7 +165,7 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
     }
 
     /// <summary>
-    /// Works out which Fanart.tv endpoint and ID an entity is looked up by.
+    /// Works out which fanart.tv endpoint and ID an entity is looked up by.
     /// </summary>
     /// <param name="entity">The entity.</param>
     /// <param name="entityKind">The endpoint.</param>
@@ -174,7 +174,7 @@ public sealed class FanartImageContributor(FanartApiClient apiClient, ILogger<Fa
     /// </param>
     /// <returns>
     /// <see langword="true"/> when the entity is a series or a movie with an
-    /// ID Fanart.tv is keyed by.
+    /// ID fanart.tv is keyed by.
     /// </returns>
     internal static bool TryGetLookup(IMetadata entity, out FanartEntityKind entityKind, out int lookupID)
     {

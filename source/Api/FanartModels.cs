@@ -10,9 +10,9 @@ namespace Shoko.Plugin.Fanart.Api;
     UNVERIFIED RESPONSE SHAPES
     ==========================
 
-    Every shape in this file was modelled from Fanart.tv's own published client
+    Every shape in this file was modelled from fanart.tv's own published client
     (https://github.com/fanart-tv/fanart.tv-api, `src/index.d.ts` and its
-    README) and NOT from a captured live response, because Fanart.tv requires an
+    README) and NOT from a captured live response, because fanart.tv requires an
     API key for all access and none was available while this was written. The
     test fixtures next to it are hand-written to match, and are labelled as
     invented rather than captured.
@@ -37,7 +37,7 @@ namespace Shoko.Plugin.Fanart.Api;
 */
 
 /// <summary>
-/// One Fanart.tv artwork response, for a TV show (<c>/v3.2/tv/{tvdb_id}</c>) or
+/// One fanart.tv artwork response, for a TV show (<c>/v3.2/tv/{tvdb_id}</c>) or
 /// a movie (<c>/v3.2/movies/{tmdb_id}</c>). Both endpoints answer with the same
 /// envelope: a name, one or more identifiers, and a top-level key per asset
 /// kind holding an array of images.
@@ -45,7 +45,7 @@ namespace Shoko.Plugin.Fanart.Api;
 public sealed class FanartArtworkSet
 {
     /// <summary>
-    /// The title Fanart.tv holds for the show or movie. Only ever used for log
+    /// The title fanart.tv holds for the show or movie. Only ever used for log
     /// lines.
     /// </summary>
     [JsonPropertyName("name")]
@@ -53,7 +53,7 @@ public sealed class FanartArtworkSet
 
     /// <summary>
     /// Every field that is not <see cref="Name"/>, which is where the artwork
-    /// itself and the identifiers arrive. Kept open on purpose: Fanart.tv adds
+    /// itself and the identifiers arrive. Kept open on purpose: fanart.tv adds
     /// asset kinds server-side and serves them to existing clients without
     /// notice.
     /// </summary>
@@ -131,11 +131,11 @@ public sealed class FanartArtworkSet
 }
 
 /// <summary>
-/// The images Fanart.tv holds under one asset kind, such as <c>hdtvlogo</c> or
+/// The images fanart.tv holds under one asset kind, such as <c>hdtvlogo</c> or
 /// <c>movieposter</c>.
 /// </summary>
 /// <param name="Kind">
-/// The asset kind, exactly as Fanart.tv spelled it.
+/// The asset kind, exactly as fanart.tv spelled it.
 /// </param>
 /// <param name="Images">
 /// The images under that kind.
@@ -143,12 +143,12 @@ public sealed class FanartArtworkSet
 public sealed record FanartArtworkGroup(string Kind, IReadOnlyList<FanartImage> Images);
 
 /// <summary>
-/// One image in a Fanart.tv response.
+/// One image in a fanart.tv response.
 /// </summary>
 public sealed class FanartImage
 {
     /// <summary>
-    /// Fanart.tv's own ID for the image. Not used as Shoko's resource ID, which
+    /// fanart.tv's own ID for the image. Not used as Shoko's resource ID, which
     /// is derived from the URL instead, since that is what a download needs.
     /// </summary>
     [JsonPropertyName("id")]
@@ -179,7 +179,7 @@ public sealed class FanartImage
     public int? Likes { get; set; }
 
     /// <summary>
-    /// When the image was uploaded, as Fanart.tv formats it
+    /// When the image was uploaded, as fanart.tv formats it
     /// ("2019-08-16 22:52:46"). Present from API v3.1 onwards, and unused.
     /// </summary>
     [JsonPropertyName("added")]
@@ -229,7 +229,7 @@ public sealed class FanartImage
 
     /// <summary>
     /// The ISO 639-1 language code for the text in the image, or
-    /// <see langword="null"/> when the image has no text in it. Fanart.tv
+    /// <see langword="null"/> when the image has no text in it. fanart.tv
     /// spells "no language" as "00", and occasionally as an empty string.
     /// </summary>
     public string? LanguageCode
@@ -239,12 +239,12 @@ public sealed class FanartImage
 }
 
 /// <summary>
-/// Shared serializer options for Fanart.tv responses.
+/// Shared serializer options for fanart.tv responses.
 /// </summary>
 public static class FanartJson
 {
     /// <summary>
-    /// The options every Fanart.tv response is read with. Property names are
+    /// The options every fanart.tv response is read with. Property names are
     /// mapped explicitly, so no naming policy is set; unknown fields are
     /// collected rather than rejected.
     /// </summary>
@@ -255,7 +255,7 @@ public static class FanartJson
 }
 
 /// <summary>
-/// Reads a value that Fanart.tv sends as a JSON string, but that a future API
+/// Reads a value that fanart.tv sends as a JSON string, but that a future API
 /// version might send as a number, into a <see cref="string"/>.
 /// </summary>
 public sealed class LaxStringConverter : JsonConverter<string?>
@@ -283,7 +283,7 @@ public sealed class LaxStringConverter : JsonConverter<string?>
 }
 
 /// <summary>
-/// Reads a value that Fanart.tv sends as a JSON string holding a number, but
+/// Reads a value that fanart.tv sends as a JSON string holding a number, but
 /// that a future API version might send as a number, into an
 /// <see cref="int"/>. Anything that is not a whole number reads as
 /// <see langword="null"/>.

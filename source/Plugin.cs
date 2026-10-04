@@ -39,13 +39,13 @@ public class Plugin : IPlugin, IPluginServiceRegistration
     public Guid ID { get; private init; } = new("3eb9a6dd-eac7-48a9-9b55-ee2c7c23938b");
 
     /// <inheritdoc/>
-    public string Name { get; private set; } = "Fanart.tv Artwork";
+    public string Name { get; private set; } = "fanart.tv";
 
     /// <inheritdoc/>
     public string Description { get; private set; } = """
-        Adds series and movie artwork from Fanart.tv to TMDB's series and movies, and to
+        Adds series and movie artwork from fanart.tv to TMDB's series and movies, and to
         TheTVDB's series when a plugin provides them, keyed through the TheTVDB ID for series
-        and the TMDB ID for movies. Requires your own Fanart.tv API key.
+        and the TMDB ID for movies. Requires your own fanart.tv API key.
     """;
 
     /// <inheritdoc/>

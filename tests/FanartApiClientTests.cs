@@ -9,7 +9,7 @@ using Xunit;
 namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
-/// How the client talks to Fanart.tv: what it sends, and what it makes of each
+/// How the client talks to fanart.tv: what it sends, and what it makes of each
 /// answer.
 /// </summary>
 public class FanartApiClientTests

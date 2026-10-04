@@ -6,7 +6,7 @@ using Xunit;
 namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
-/// The politeness budget in front of Fanart.tv.
+/// The politeness budget in front of fanart.tv.
 /// </summary>
 public class FanartRateLimiterTests
 {

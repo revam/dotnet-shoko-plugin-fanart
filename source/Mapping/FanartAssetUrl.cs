@@ -4,15 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 namespace Shoko.Plugin.Fanart.Mapping;
 
 /// <summary>
-/// Converts between a Fanart.tv asset URL and the resource ID Shoko stores for
+/// Converts between a fanart.tv asset URL and the resource ID Shoko stores for
 /// it.
 /// </summary>
 /// <remarks>
 /// Shoko stores one template URL per image source and a resource ID per image,
 /// and rebuilds the remote URL as <c>string.Format(template, resourceID)</c>
-/// whenever it downloads one. For Fanart.tv the template is
+/// whenever it downloads one. For fanart.tv the template is
 /// <see cref="TemplateUrl"/> and the resource ID is everything after it, which
-/// is the whole path however Fanart.tv shapes it: a flat
+/// is the whole path however fanart.tv shapes it: a flat
 /// <c>leave-her-to-heaven-5d557fb845928.png</c> as its own documentation shows,
 /// or a nested <c>tv/121361/hdtvlogo/some-show-52fa0bcd9e66b.png</c>.
 /// Shoko stores a resource ID in 128 characters, so a longer path is refused
@@ -21,7 +21,7 @@ namespace Shoko.Plugin.Fanart.Mapping;
 public static class FanartAssetUrl
 {
     /// <summary>
-    /// The prefix every full-size Fanart.tv asset URL starts with. The CDN also
+    /// The prefix every full-size fanart.tv asset URL starts with. The CDN also
     /// serves <c>/preview/</c> (200px) and <c>/bigpreview/</c> (400px) variants
     /// of the same path, which this plugin does not use: Shoko downloads and
     /// stores the full-size image.
@@ -35,14 +35,14 @@ public static class FanartAssetUrl
     public const string TemplateUrl = AssetPrefix + "{0}";
 
     /// <summary>
-    /// Derives the resource ID Shoko should store for a Fanart.tv asset URL.
+    /// Derives the resource ID Shoko should store for a fanart.tv asset URL.
     /// </summary>
     /// <param name="url">
     /// The asset URL, as it arrived in the API response.
     /// </param>
     /// <param name="resourceID">
     /// The resource ID, or <see langword="null"/> when the URL is not a
-    /// full-size Fanart.tv asset URL.
+    /// full-size fanart.tv asset URL.
     /// </param>
     /// <returns>
     /// <see langword="true"/> when a resource ID was derived.

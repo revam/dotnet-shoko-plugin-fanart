@@ -11,7 +11,7 @@ using Shoko.Abstractions.Config;
 namespace Shoko.Plugin.Fanart.Api;
 
 /// <summary>
-/// Thin wrapper around the Fanart.tv artwork API
+/// Thin wrapper around the fanart.tv artwork API
 /// (<see href="https://webservice.fanart.tv"/>).
 /// </summary>
 /// <remarks>
@@ -60,34 +60,34 @@ public sealed class FanartApiClient(
     }
 
     /// <summary>
-    /// Gets the artwork Fanart.tv holds for a TheTVDB show.
+    /// Gets the artwork fanart.tv holds for a TheTVDB show.
     /// </summary>
     /// <param name="tvdbShowID">The TheTVDB show ID.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>
-    /// The artwork set, or <see langword="null"/> when Fanart.tv has nothing
+    /// The artwork set, or <see langword="null"/> when fanart.tv has nothing
     /// for the show or no API key is configured.
     /// </returns>
     /// <exception cref="FanartApiException">
-    /// Thrown when Fanart.tv answers with anything other than success or
+    /// Thrown when fanart.tv answers with anything other than success or
     /// "not found".
     /// </exception>
     public Task<FanartArtworkSet?> GetShowArtwork(int tvdbShowID, CancellationToken cancellationToken = default)
         => GetArtwork($"{ApiVersion}/tv/{tvdbShowID.ToString(CultureInfo.InvariantCulture)}", cancellationToken);
 
     /// <summary>
-    /// Gets the artwork Fanart.tv holds for a TMDB movie. The movie endpoint
+    /// Gets the artwork fanart.tv holds for a TMDB movie. The movie endpoint
     /// accepts either a TMDB or an IMDB ID; the TMDB ID is used, since that is
     /// the one Shoko always has for a TMDB movie.
     /// </summary>
     /// <param name="tmdbMovieID">The TMDB movie ID.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>
-    /// The artwork set, or <see langword="null"/> when Fanart.tv has nothing
+    /// The artwork set, or <see langword="null"/> when fanart.tv has nothing
     /// for the movie or no API key is configured.
     /// </returns>
     /// <exception cref="FanartApiException">
-    /// Thrown when Fanart.tv answers with anything other than success or
+    /// Thrown when fanart.tv answers with anything other than success or
     /// "not found".
     /// </exception>
     public Task<FanartArtworkSet?> GetMovieArtwork(int tmdbMovieID, CancellationToken cancellationToken = default)
@@ -108,7 +108,7 @@ public sealed class FanartApiClient(
             using var response = await Send(requestUri, cancellationToken).ConfigureAwait(false);
             switch (response.StatusCode)
             {
-                // Fanart.tv has no artwork for the ID, which is the common case
+                // fanart.tv has no artwork for the ID, which is the common case
                 // rather than an error: most entries in a library have none.
                 case HttpStatusCode.NotFound:
                     return null;
@@ -119,17 +119,17 @@ public sealed class FanartApiClient(
                         ?? TimeSpan.FromSeconds(1);
                     if (delay < TimeSpan.Zero)
                         delay = TimeSpan.FromSeconds(1);
-                    logger.LogWarning("Fanart.tv rate limited the request for {Path}; retrying in {Delay}.", path, delay);
+                    logger.LogWarning("fanart.tv rate limited the request for {Path}; retrying in {Delay}.", path, delay);
                     await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
                     continue;
 
                 case var status when !response.IsSuccessStatusCode:
-                    throw new FanartApiException(status, $"Fanart.tv answered {(int)status} ({status}) for /{path}.");
+                    throw new FanartApiException(status, $"fanart.tv answered {(int)status} ({status}) for /{path}.");
             }
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-            // UNVERIFIED: how Fanart.tv reports an ID it does not know is
+            // UNVERIFIED: how fanart.tv reports an ID it does not know is
             // assumed to be a 404, but some of its endpoints are reported to
             // answer 200 with an error body instead. That case needs no special
             // handling here: such a body parses into an envelope with no
@@ -141,7 +141,7 @@ public sealed class FanartApiClient(
             }
             catch (JsonException ex)
             {
-                throw new FanartApiException(response.StatusCode, $"Fanart.tv answered /{path} with a body that could not be parsed.", ex);
+                throw new FanartApiException(response.StatusCode, $"fanart.tv answered /{path} with a body that could not be parsed.", ex);
             }
         }
     }
@@ -161,13 +161,13 @@ public sealed class FanartApiClient(
 }
 
 /// <summary>
-/// Thrown when Fanart.tv answers a request with something the client cannot
+/// Thrown when fanart.tv answers a request with something the client cannot
 /// make sense of.
 /// </summary>
 public sealed class FanartApiException : Exception
 {
     /// <summary>
-    /// The status code Fanart.tv answered with.
+    /// The status code fanart.tv answered with.
     /// </summary>
     public HttpStatusCode StatusCode { get; }
 
@@ -180,7 +180,7 @@ public sealed class FanartApiException : Exception
     /// <summary>
     /// Initializes a new instance of the <see cref="FanartApiException"/> class.
     /// </summary>
-    /// <param name="statusCode">The status code Fanart.tv answered with.</param>
+    /// <param name="statusCode">The status code fanart.tv answered with.</param>
     /// <param name="message">The message that describes the error.</param>
     /// <param name="innerException">The exception that caused this one, if any.</param>
     public FanartApiException(HttpStatusCode statusCode, string message, Exception? innerException = null)

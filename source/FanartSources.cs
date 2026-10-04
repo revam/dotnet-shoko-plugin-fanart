@@ -17,11 +17,11 @@ public static class FanartSources
 {
     static FanartSources()
     {
-        FanartTV = MetadataSource.Register("Fanart.tv", "fanart-tv", ["FanartTV"], description: "Community artwork at fanart.tv.");
+        FanartTV = MetadataSource.Register("fanart.tv", "fanart-tv", ["FanartTV"], description: "Community artwork at fanart.tv.");
     }
 
     /// <summary>
-    /// Fanart.tv, as <c>fanart-tv</c>. Every image and cross-reference the
+    /// fanart.tv, as <c>fanart-tv</c>. Every image and cross-reference the
     /// plugin writes is attributed to it.
     /// </summary>
     public static MetadataSource FanartTV { get; }

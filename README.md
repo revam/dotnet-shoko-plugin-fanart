@@ -1,11 +1,11 @@
-# Shoko Fanart.tv Artwork Plugin
+# Shoko fanart.tv Plugin
 
 A [Shoko](https://shokoanime.com/) plugin that adds series and movie artwork
-from [Fanart.tv](https://fanart.tv/) to the TMDB entries in your collection, and
+from [fanart.tv](https://fanart.tv/) to the TMDB entries in your collection, and
 to TheTVDB's series when a plugin provides them, as one of Shoko's image
 contributors.
 
-Fanart.tv is where the artwork Shoko has no other source for lives: transparent
+fanart.tv is where the artwork Shoko has no other source for lives: transparent
 logos, banners, high resolution backgrounds and disc art, all drawn and uploaded
 by people rather than scraped off a distributor's press kit.
 
@@ -13,7 +13,7 @@ by people rather than scraped off a distributor's press kit.
 
 **Series and movie artwork only.** No season artwork, and no episode artwork.
 
-That is a deliberate limit rather than a missing feature. Fanart.tv numbers its
+That is a deliberate limit rather than a missing feature. fanart.tv numbers its
 season artwork by TheTVDB seasons, and a series' seasons in Shoko mostly come
 from TMDB. The two agree often enough to be tempting and disagree often enough
 to be wrong, and there is no honest way to attach a TheTVDB season 2 poster to a
@@ -41,9 +41,9 @@ which also removes the links this plugin added on that pair.
   fetched images, or when someone asks for the entry's images through an image
   action), it queues one `DownloadContributedImagesJob` for this contributor.
   That job hands each series or movie of an enabled pair to the plugin, which
-  answers with the artwork Fanart.tv lists for it. At most two of these jobs run
+  answers with the artwork fanart.tv lists for it. At most two of these jobs run
   at once, and every request also waits on the plugin's own rate limiter.
-- **Keying, for shows.** Fanart.tv's TV API is keyed by TheTVDB ID and has no
+- **Keying, for shows.** fanart.tv's TV API is keyed by TheTVDB ID and has no
   other way in. A TMDB show lists its TheTVDB ID among its cross-source IDs,
   TMDB is what supplies that translation, and Shoko already stores it, so the
   whole lookup path is `TMDB show -> TheTVDB ID -> GET /v3.2/tv/{tvdb_id}`. No Trakt, no TheTVDB API
@@ -70,9 +70,9 @@ which also removes the links this plugin added on that pair.
   Shoko stores one template URL per image source and rebuilds a download URL as
   `string.Format(template, resourceID)`. It keeps defaults for AniDB and TMDB
   only, so the plugin registers `https://assets.fanart.tv/fanart/{0}` as the
-  Fanart.tv default on every start. A template you set yourself, say for a
+  fanart.tv default on every start. A template you set yourself, say for a
   mirror of your own, takes precedence over it. Each image's resource ID is the
-  rest of its asset URL. A URL that is not a full-size Fanart.tv asset URL, or
+  rest of its asset URL. A URL that is not a full-size fanart.tv asset URL, or
   whose path would not fit the 128 character column, is skipped rather than
   stored as something that cannot be downloaded.
 - **Ordering.** Within one Shoko image type, the asset kind ranks first and the
@@ -83,17 +83,17 @@ which also removes the links this plugin added on that pair.
   version of the same thing wins. The server then orders that list by your
   preferred image languages.
 - **What is downloaded.** The plugin offers every mapped image, and the server
-  picks which to download from its image settings for the Fanart.tv source (or
+  picks which to download from its image settings for the fanart.tv source (or
   the shared defaults): a switch and a maximum count per image type, and a
   language order. Disc art is linked but not downloaded, since no image setting
   covers discs.
-- **Withdrawn artwork.** An image Fanart.tv no longer lists is unlinked by the
+- **Withdrawn artwork.** An image fanart.tv no longer lists is unlinked by the
   server on the next refresh, which is how a deleted or replaced upload stops
   being offered. Only this plugin's links are touched, and the image itself is
-  never deleted, only the link. When Fanart.tv answers "not found" for the
+  never deleted, only the link. When fanart.tv answers "not found" for the
   whole show or movie, or the key is missing or rejected, the links already
   there are left as they are.
-- **Refreshing by hand.** The "Refresh Fanart.tv Artwork" series action, open
+- **Refreshing by hand.** The "Refresh fanart.tv Artwork" series action, open
   to every user, asks the server for the images of each linked series and
   movie the contributor is enabled for. That runs the owner's image job
   without forcing anything already downloaded, and the contributor after it.
@@ -102,13 +102,13 @@ which also removes the links this plugin added on that pair.
 
 ## Artwork mapping
 
-Shoko has five image types. Fanart.tv has roughly twice as many asset kinds, so
+Shoko has five image types. fanart.tv has roughly twice as many asset kinds, so
 the ones with no honest counterpart are dropped rather than forced into the
 nearest slot.
 
 ### TV shows
 
-| Fanart.tv | Shoko | |
+| fanart.tv | Shoko | |
 |---|---|---|
 | `tvposter` | Primary | |
 | `show4kbackground` | Backdrop | Ranked above the 1080p version |
@@ -123,7 +123,7 @@ nearest slot.
 
 ### Movies
 
-| Fanart.tv | Shoko | |
+| fanart.tv | Shoko | |
 |---|---|---|
 | `movieposter` | Primary | |
 | `movie4kbackground` | Backdrop | Ranked above the 1080p version |
@@ -135,7 +135,7 @@ nearest slot.
 | `moviethumb` | dropped | A 1000x562 thumbnail, and Shoko has no thumbnail type |
 | `hdmovieclearart`, `movieart` | dropped | Transparent key art, as above |
 
-Asset kinds this table has never heard of are ignored. Fanart.tv adds kinds
+Asset kinds this table has never heard of are ignored. fanart.tv adds kinds
 server-side without notice, and guessing at one from its name is how artwork
 ends up in the wrong slot. Adding a new one is one line in
 `FanartArtworkMap`.
@@ -149,7 +149,7 @@ ends up in the wrong slot. Adding a new one is one line in
    ```
    https://raw.githubusercontent.com/revam/dotnet-shoko-plugin-fanart/metadata/manifest.json
    ```
-3. Go to **Settings → Plugins → Browse** and find **Fanart.tv Artwork**.
+3. Go to **Settings → Plugins → Browse** and find **fanart.tv**.
 4. Click **Install** on the desired version.
 5. Restart Shoko.
 
@@ -163,7 +163,7 @@ ends up in the wrong slot. Adding a new one is one line in
 
 ## Configuration
 
-Fanart.tv requires an API key for all access, and the key belongs to whoever
+fanart.tv requires an API key for all access, and the key belongs to whoever
 installed the plugin: a key bundled with a release would be shared by every
 install and rate limited accordingly. Get one at
 [fanart.tv/get-an-api-key](https://fanart.tv/get-an-api-key/).
@@ -175,7 +175,7 @@ install and rate limited accordingly. Get one at
 
 Everything else is the server's: which pairs the contributor is on for (movies
 included), under its image contributor settings, and how many images of each
-type are downloaded, under its image settings for the Fanart.tv source.
+type are downloaded, under its image settings for the fanart.tv source.
 
 No setting is marked `[Required]`: a required setting that is unset fails
 validation, and a configuration that fails validation stops the whole plugin
@@ -183,7 +183,7 @@ from loading. A missing key is checked for at runtime instead.
 
 ## Verified against the live API
 
-The response models were written from Fanart.tv's own published client
+The response models were written from fanart.tv's own published client
 ([fanart-tv/fanart.tv-api](https://github.com/fanart-tv/fanart.tv-api)) and its
 documentation before any key was available, and were confirmed against the live
 API on 2026-09-18: a show through `v3.2/tv` and nine linked movies through
@@ -217,15 +217,15 @@ Drop `source/bin/Release/net10.0/Shoko.Plugin.Fanart.dll` into your Shoko data
 directory's `plugins/` folder.
 
 To check it against a running server: set an API key, then
-`GET /api/v3/Metadata/ImageContributor` should list "Fanart.tv" with the pairs
-above. Run the "Refresh Fanart.tv Artwork" action on a series linked to a
+`GET /api/v3/Metadata/ImageContributor` should list "fanart.tv" with the pairs
+above. Run the "Refresh fanart.tv Artwork" action on a series linked to a
 show with a TheTVDB ID, wait for its `Download Contributed Images` job, and the
 series' images (`GET /api/v3/Series/{id}/Images?includeDisabled=true`) should
 hold `fanart-tv` artwork.
 
 ## Credits
 
-All artwork comes from [Fanart.tv](https://fanart.tv/) and the people who upload
+All artwork comes from [fanart.tv](https://fanart.tv/) and the people who upload
 it there. This plugin only fetches it.
 
 ## License

@@ -1,13 +1,13 @@
 # Fixtures
 
 **Every file in this folder is hand-written. None of them is a capture of a real
-Fanart.tv response.** The shapes they imitate were confirmed against the live
+fanart.tv response.** The shapes they imitate were confirmed against the live
 API on 2026-09-18, for both `v3.2/tv` and `v3.2/movies`, so a fixture that
 disagrees with one of those is a bug in the fixture.
 
-Fanart.tv requires an API key for all access, and no key was available while
+fanart.tv requires an API key for all access, and no key was available while
 this plugin was written, so the fixtures reproduce the response shape documented
-by Fanart.tv's own API client
+by fanart.tv's own API client
 ([fanart-tv/fanart.tv-api](https://github.com/fanart-tv/fanart.tv-api), `src/index.d.ts`
 and its README) rather than anything the live API actually returned.
 

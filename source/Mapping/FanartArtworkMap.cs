@@ -7,20 +7,20 @@ using Shoko.Abstractions.Metadata.Enums;
 namespace Shoko.Plugin.Fanart.Mapping;
 
 /// <summary>
-/// Which Fanart.tv asset kind becomes which Shoko image type.
+/// Which fanart.tv asset kind becomes which Shoko image type.
 /// </summary>
 /// <remarks>
 /// <para>
 /// Shoko has five image types: <see cref="ImageEntityType.Primary"/>,
 /// <see cref="ImageEntityType.Backdrop"/>, <see cref="ImageEntityType.Banner"/>,
 /// <see cref="ImageEntityType.Logo"/> and <see cref="ImageEntityType.Disc"/>.
-/// Fanart.tv has roughly twice as many asset kinds, so several of them have no
+/// fanart.tv has roughly twice as many asset kinds, so several of them have no
 /// honest counterpart and are deliberately dropped rather than forced into the
 /// nearest type. <see cref="DroppedShowKinds"/> and
 /// <see cref="DroppedMovieKinds"/> say which, and why.
 /// </para>
 /// <para>
-/// Kinds this table has never heard of are ignored. Fanart.tv adds asset kinds
+/// Kinds this table has never heard of are ignored. fanart.tv adds asset kinds
 /// server-side without notice, and guessing at one from its name is how artwork
 /// ends up in the wrong slot.
 /// </para>
@@ -34,14 +34,14 @@ public static class FanartArtworkMap
     /// <remarks>
     /// Season artwork (<c>seasonposter</c>, <c>seasonthumb</c>,
     /// <c>seasonbanner</c>) is absent on purpose and is not a candidate for a
-    /// later pass either: Fanart.tv numbers its season artwork by TheTVDB
+    /// later pass either: fanart.tv numbers its season artwork by TheTVDB
     /// seasons, and a TMDB season with the same number is not necessarily the
     /// same season. Attaching one to the other would be a guess dressed up as
     /// a link.
     /// </remarks>
     public static ImmutableArray<FanartArtworkKind> ShowKinds { get; } =
     [
-        // Not in Fanart.tv's own typed client, which lists every other kind
+        // Not in fanart.tv's own typed client, which lists every other kind
         // here, but it is a real asset kind on the site. UNVERIFIED: if the API
         // never sends it, this entry simply never matches.
         new("tvposter", ImageEntityType.Primary, Priority: 0),
@@ -107,7 +107,7 @@ public static class FanartArtworkMap
     /// Looks up the mapping for one asset kind.
     /// </summary>
     /// <param name="entityKind">Whether the artwork came from the TV or the movie endpoint.</param>
-    /// <param name="kind">The asset kind, as Fanart.tv spelled it.</param>
+    /// <param name="kind">The asset kind, as fanart.tv spelled it.</param>
     /// <param name="mapping">The mapping, when there is one.</param>
     /// <returns>
     /// <see langword="true"/> when the asset kind maps to a Shoko image type.
@@ -128,9 +128,9 @@ public static class FanartArtworkMap
 }
 
 /// <summary>
-/// One Fanart.tv asset kind and the Shoko image type it maps to.
+/// One fanart.tv asset kind and the Shoko image type it maps to.
 /// </summary>
-/// <param name="Kind">The asset kind, as Fanart.tv spells it.</param>
+/// <param name="Kind">The asset kind, as fanart.tv spells it.</param>
 /// <param name="ImageType">The Shoko image type it becomes.</param>
 /// <param name="Priority">
 /// How this kind ranks against the other kinds that map to the same image type,
@@ -140,7 +140,7 @@ public static class FanartArtworkMap
 public sealed record FanartArtworkKind(string Kind, ImageEntityType ImageType, int Priority);
 
 /// <summary>
-/// Which of Fanart.tv's two artwork endpoints an entity is looked up through.
+/// Which of fanart.tv's two artwork endpoints an entity is looked up through.
 /// </summary>
 public enum FanartEntityKind
 {

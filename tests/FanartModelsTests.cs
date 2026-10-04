@@ -6,7 +6,7 @@ using Xunit;
 namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
-/// Reading a Fanart.tv response envelope.
+/// Reading a fanart.tv response envelope.
 /// </summary>
 /// <remarks>
 /// The fixtures behind these tests are hand-written rather than captured, so

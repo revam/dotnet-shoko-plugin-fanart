@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 namespace Shoko.Plugin.Fanart.Api;
 
 /// <summary>
-/// Token bucket rate limiter for Fanart.tv calls. Thread-safe.
+/// Token bucket rate limiter for fanart.tv calls. Thread-safe.
 /// </summary>
 /// <remarks>
-/// Fanart.tv publishes no request-per-second figure. Its documentation says
+/// fanart.tv publishes no request-per-second figure. Its documentation says
 /// only that requests "may be rate limited" per API key when usage is heavy,
 /// and answers with HTTP 429 and a <c>Retry-After</c> header when that happens
 /// (<see cref="FanartApiClient"/> honours it). The defaults here, a burst of

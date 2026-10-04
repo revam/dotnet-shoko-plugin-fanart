@@ -125,13 +125,13 @@ internal sealed class RecordingLogger<T> : ILogger<T>
 }
 
 /// <summary>
-/// Reads the Fanart.tv fixtures in <c>tests/Fixtures</c>.
+/// Reads the fanart.tv fixtures in <c>tests/Fixtures</c>.
 /// </summary>
 /// <remarks>
 /// <strong>Every fixture in that folder is hand-written, not captured.</strong>
-/// Fanart.tv requires an API key for all access and none was available when
+/// fanart.tv requires an API key for all access and none was available when
 /// this plugin was written, so the fixtures reproduce the shape documented by
-/// Fanart.tv's own client rather than a real response. They prove the plugin
+/// fanart.tv's own client rather than a real response. They prove the plugin
 /// does what it means to do with that shape; they cannot prove the shape is
 /// right. Replace them with real captures once a key is available.
 /// </remarks>

@@ -7,7 +7,7 @@ using Shoko.Plugin.Fanart.Api;
 namespace Shoko.Plugin.Fanart.Mapping;
 
 /// <summary>
-/// Turns a Fanart.tv response into the flat, ordered list of artwork this
+/// Turns a fanart.tv response into the flat, ordered list of artwork this
 /// plugin offers the core for an entity.
 /// </summary>
 /// <remarks>
@@ -19,7 +19,7 @@ namespace Shoko.Plugin.Fanart.Mapping;
 public static class FanartArtworkSelector
 {
     /// <summary>
-    /// Selects the artwork to offer from one Fanart.tv response.
+    /// Selects the artwork to offer from one fanart.tv response.
     /// </summary>
     /// <param name="artworkSet">The response.</param>
     /// <param name="entityKind">Whether it came from the TV or the movie endpoint.</param>
@@ -62,7 +62,7 @@ public static class FanartArtworkSelector
             .SelectMany(group => group
                 .OrderBy(candidate => candidate.Mapping.Priority)
                 .ThenByDescending(candidate => candidate.Image.Likes ?? 0)
-                // Fanart.tv returns artwork in no documented order, and plenty
+                // fanart.tv returns artwork in no documented order, and plenty
                 // of images have zero likes, so the resource ID breaks ties to
                 // keep a refresh from reshuffling the same artwork every run.
                 .ThenBy(candidate => candidate.ResourceID, StringComparer.Ordinal)
@@ -84,9 +84,9 @@ public static class FanartArtworkSelector
 /// <summary>
 /// One piece of artwork, resolved down to what Shoko needs to store it.
 /// </summary>
-/// <param name="ResourceID">The resource ID, relative to the Fanart.tv template URL.</param>
+/// <param name="ResourceID">The resource ID, relative to the fanart.tv template URL.</param>
 /// <param name="ImageType">The Shoko image type.</param>
-/// <param name="Kind">The Fanart.tv asset kind it came from, for logging.</param>
+/// <param name="Kind">The fanart.tv asset kind it came from, for logging.</param>
 /// <param name="LanguageCode">
 /// The ISO 639-1 code for the text in the image, or <see langword="null"/> when
 /// it has none.

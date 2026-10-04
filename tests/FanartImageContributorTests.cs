@@ -17,7 +17,7 @@ namespace Shoko.Plugin.Fanart.Tests;
 
 /// <summary>
 /// What the contributor tells the core: what it covers, how it finds an entity
-/// on Fanart.tv, and what it answers for one.
+/// on fanart.tv, and what it answers for one.
 /// </summary>
 public class FanartImageContributorTests
 {

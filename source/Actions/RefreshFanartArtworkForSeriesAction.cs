@@ -13,7 +13,7 @@ namespace Shoko.Plugin.Fanart.Actions;
 
 /// <summary>
 /// Asks the core to refresh the images of every series and movie a series is
-/// linked to that Fanart.tv artwork is added to, so the contributor runs now.
+/// linked to that fanart.tv artwork is added to, so the contributor runs now.
 /// </summary>
 /// <remarks>
 /// The core queues the owner's image job for each entry, unforced so nothing
@@ -27,10 +27,10 @@ public class RefreshFanartArtworkForSeriesAction(
 ) : SeriesAction
 {
     /// <inheritdoc/>
-    public override string Name => "Refresh Fanart.tv Artwork";
+    public override string Name => "Refresh fanart.tv Artwork";
 
     /// <inheritdoc/>
-    public override string? Description => "Adds artwork from Fanart.tv to every linked series and movie it covers.";
+    public override string? Description => "Adds artwork from fanart.tv to every linked series and movie it covers.";
 
     /// <inheritdoc/>
     public override ActionCategory Category => ActionCategory.Images;
@@ -42,9 +42,9 @@ public class RefreshFanartArtworkForSeriesAction(
     public override Task<ActionValidationResult?> Validate(CancellationToken token = default)
     {
         if (!apiClient.HasApiKey)
-            return Task.FromResult<ActionValidationResult?>(new("No Fanart.tv API key is configured."));
+            return Task.FromResult<ActionValidationResult?>(new("No fanart.tv API key is configured."));
         if (GetCoveredEntries().Count is 0)
-            return Task.FromResult<ActionValidationResult?>(new("The series is linked to nothing Fanart.tv artwork is added to."));
+            return Task.FromResult<ActionValidationResult?>(new("The series is linked to nothing fanart.tv artwork is added to."));
 
         return Task.FromResult<ActionValidationResult?>(null);
     }

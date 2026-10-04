@@ -105,7 +105,7 @@ jobs:
           # an empty one just leaves the notes off the release entry.
           printf '%s' "${RELEASE_BODY}" > "${RUNNER_TEMP}/release-notes.md"
 
-      # Official builds ship the project key Fanart.tv issued for this
+      # Official builds ship the project key fanart.tv issued for this
       # plugin, because their terms expect a program to send its own project
       # key and let a user add a personal key alongside it. The key is a
       # secret rather than a value in the tree, so an unofficial build of

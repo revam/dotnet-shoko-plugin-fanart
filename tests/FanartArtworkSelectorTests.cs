@@ -35,7 +35,7 @@ public class FanartArtworkSelectorTests
 
         var types = artwork.Select(entry => entry.ImageType).Distinct().Order().ToArray();
 
-        // No Disc: Fanart.tv has no disc artwork for TV shows.
+        // No Disc: fanart.tv has no disc artwork for TV shows.
         Assert.Equal([ImageEntityType.Primary, ImageEntityType.Backdrop, ImageEntityType.Banner, ImageEntityType.Logo], types);
     }
 
