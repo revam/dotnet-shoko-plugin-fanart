@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NJsonSchema;
 using Shoko.Abstractions.Config;
@@ -7,6 +8,7 @@ using Shoko.Abstractions.Config.Enums;
 using Shoko.Abstractions.Config.Events;
 using Shoko.Abstractions.Config.Services;
 using Shoko.Abstractions.Plugin;
+using Shoko.Abstractions.UI;
 using Shoko.Abstractions.User;
 
 // The host's interface declares events this fake has no reason to raise.
@@ -65,6 +67,10 @@ internal sealed class FakeConfigurationService(FanartConfiguration configuration
 
     public ConfigurationActionResult PerformCustomAction<TConfig>(TConfig configuration, string path, string actionID, IUser? user = null, Uri? uri = null) where TConfig : class, IConfiguration, new() => throw new NotSupportedException();
 
+    public Task<IReadOnlyList<UiOption>> GetOptionsAsync(ConfigurationInfo info, IConfiguration configuration, string path, IUser? user = null, Uri? uri = null) => throw new NotSupportedException();
+
+    public Task<IReadOnlyList<UiOption>> GetOptionsAsync<TConfig>(TConfig configuration, string path, IUser? user = null, Uri? uri = null) where TConfig : class, IConfiguration, new() => throw new NotSupportedException();
+
     public ConfigurationActionResult PerformReactiveAction(ConfigurationInfo info, IConfiguration configuration, string path, ConfigurationActionType actionType, ReactiveEventType reactiveEventType = ReactiveEventType.All, IUser? user = null, Uri? uri = null) => throw new NotSupportedException();
 
     public ConfigurationActionResult PerformReactiveAction<TConfig>(TConfig configuration, string path, ConfigurationActionType actionType, ReactiveEventType reactiveEventType = ReactiveEventType.All, IUser? user = null, Uri? uri = null) where TConfig : class, IConfiguration, new() => throw new NotSupportedException();
@@ -90,6 +96,8 @@ internal sealed class FakeConfigurationService(FanartConfiguration configuration
     public string GetSchema(ConfigurationInfo info) => throw new NotSupportedException();
 
     public JsonSchema GenerateSchema(Type type) => throw new NotSupportedException();
+
+    public UiDefinition GenerateUiDefinition(Type type) => throw new NotSupportedException();
 
     public string Serialize(IConfiguration config) => throw new NotSupportedException();
 
