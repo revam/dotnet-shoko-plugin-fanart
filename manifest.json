@@ -17,6 +17,22 @@
   ],
   "releases": [
     {
+      "version": "1.2.1",
+      "tag": "v1.2.1",
+      "released_at": "2026-10-13T19:40:06.2281983Z",
+      "channel": "Stable",
+      "release_notes": "Rebuilt against the abstractions \u00606.0.0-alpha.104\u0060 release.\n\nRequires Shoko Server with abstractions \u00606.0.0-alpha.104\u0060.",
+      "dependencies": [],
+      "archives": [
+        {
+          "runtime": "any",
+          "abstraction": "6.0.0",
+          "url": "https://github.com/revam/dotnet-shoko-plugin-fanart/releases/download/v1.2.1/Fanart.tvArtwork-v1.2.1-any.zip",
+          "checksum": "sha256:1c830460060ff837ecd9c13ef25737693d157f32380180293739f8a2565584b3"
+        }
+      ]
+    },
+    {
       "version": "1.2.0",
       "tag": "v1.2.0",
       "released_at": "2026-10-06T21:29:39.5629798Z",
