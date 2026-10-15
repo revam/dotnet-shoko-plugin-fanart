@@ -22,7 +22,7 @@ namespace Shoko.Plugin.Fanart;
 /// Everything the plugin needs is registered in <see cref="RegisterServices(IServiceCollection, IApplicationPaths)"/>
 /// instead, and the template URL in <see cref="Setup(IServiceProvider)"/>.
 /// </remarks>
-public class Plugin : IPlugin, IPluginServiceRegistration
+public class Plugin : IPlugin<FanartConfiguration>, IPluginServiceRegistration
 {
     /// <summary>
     /// The embedded resource of the plugin's thumbnail.

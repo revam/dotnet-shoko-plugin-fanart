@@ -24,7 +24,7 @@ namespace Shoko.Plugin.Fanart;
 /// </para>
 /// </remarks>
 [Display(Name = "fanart.tv")]
-public class FanartConfiguration : IConfiguration
+public class FanartConfiguration : IPluginConfiguration
 {
     #region Credentials
 
